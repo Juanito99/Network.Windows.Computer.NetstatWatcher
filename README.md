@@ -4,12 +4,12 @@ Simple Management Pack which monitors specified listening ports or network conne
 
 
 ### Diagram View:
-![DiagramView](https://raw.githubusercontent.com/Juanito99/F5_BIGIP_OpsMgr/master/PicturesForGitWebSite/f5diagramview.png)
+![DiagramView](https://raw.githubusercontent.com/Juanito99/Network.Windows.Computer.NetstatWatcher/master/PicturesForGitWebSite/Diagram%20view%20showing%20monitored%20listening%20ports%20and%20tcp%20connections.png)
 
 ### State Views:
-![StateView_Listen](https://raw.githubusercontent.com/Juanito99/F5_BIGIP_OpsMgr/master/PicturesForGitWebSite/f5alertviews.png)
+![StateView_Listen](https://raw.githubusercontent.com/Juanito99/Network.Windows.Computer.NetstatWatcher/master/PicturesForGitWebSite/stateview%20showing%20listeningPorts.png)
 
-![StateView_Connection](https://raw.githubusercontent.com/Juanito99/F5_BIGIP_OpsMgr/master/PicturesForGitWebSite/f5alertviews.png)
+![StateView_Connection](https://raw.githubusercontent.com/Juanito99/Network.Windows.Computer.NetstatWatcher/master/PicturesForGitWebSite/stateview%20showing%20tcpConnections.png)
 
 
 ### More information on:
