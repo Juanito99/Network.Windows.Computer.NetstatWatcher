@@ -1,1 +1,1 @@
-# Network.Windows.Computer.NetstatWatcher
+# Monitor any network-connection or listening port with SCOM
