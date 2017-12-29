@@ -13,15 +13,15 @@ Simple Management Pack which monitors specified listening ports or network conne
 
 
 ### More information on:
-[Documentation](https://github.com/Juanito99/F5_BIGIP_OpsMgr/blob/master/Documentation/Monitor_F5_BIGIP_with_OpsMgr.pdf)
+[Documentation](https://github.com/Juanito99/Network.Windows.Computer.NetstatWatcher/blob/master/Documentation/Monitor%20any%20network-connection%20or%20listening%20port%20with%20SCOM%20-%20Git.pdf)
 
 
 ### Downloads:
-[ManagementPack-Sealed](https://github.com/Juanito99/F5_BIGIP_OpsMgr/blob/master/ABC.F5.BIGIP/ABC.F5.BIGIP/bin/Debug/ABC.F5.BIGIP.mpb) 
+[ManagementPack-Sealed](https://github.com/Juanito99/Network.Windows.Computer.NetstatWatcher/blob/master/Network.Windows.Computer.NetstatWatcher/Network.Windows.Computer.NetstatWatcher/bin/Release/Network.Windows.Computer.NetstatWatcher.mpb) 
 
-[ManagementPack-UnSealed](https://github.com/Juanito99/F5_BIGIP_OpsMgr/blob/master/ABC.F5.BIGIP/ABC.F5.BIGIP/bin/Release/ABC.F5.BIGIP.mpb) 
+[ManagementPack-UnSealed](https://github.com/Juanito99/Network.Windows.Computer.NetstatWatcher/blob/master/Network.Windows.Computer.NetstatWatcher/Network.Windows.Computer.NetstatWatcher/bin/Debug/Network.Windows.Computer.NetstatWatcher.mpb) 
 
-[Source for VSAE 2015](https://github.com/Juanito99/F5_BIGIP_OpsMgr/tree/master/ABC.F5.BIGIP)
+[Source for VSAE 2015](https://github.com/Juanito99/Network.Windows.Computer.NetstatWatcher/tree/master/Network.Windows.Computer.NetstatWatcher/Network.Windows.Computer.NetstatWatcher)
 
 
 
