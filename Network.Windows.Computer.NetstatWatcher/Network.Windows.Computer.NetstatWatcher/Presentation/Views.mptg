@@ -1,0 +1,60 @@
+<TemplateGroup>
+  <Instances>
+    <Instance ID="Instanceaac2f41d1cd940b795894c063f089c83" Type="Microsoft.SystemCenter.Authoring.CodeGeneration.Monitoring.CustomView" Version="1.0.0.0">
+      <CustomViewConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ViewFolder>Network.Windows.Computer.NetstatWatcher.Folders</ViewFolder>
+        <ViewType>SC!Microsoft.SystemCenter.StateViewType</ViewType>
+        <ViewConfiguration>&lt;Presentation&gt;&lt;ColumnInfo Index="0" Grouped="false" IsSortable="true" Sorted="true" SortIndex="-1" Visible="true" SortOrder="Descending" Width="120"&gt;&lt;Name&gt;State&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.Computer&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="1" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="180"&gt;&lt;Name&gt;NodeName&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.Computer/NodeName&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="2" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="400"&gt;&lt;Name&gt;FilePath&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.Computer/FilePath&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;/Presentation&gt;</ViewConfiguration>
+        <Visible>true</Visible>
+        <Accessibility>Internal</Accessibility>
+        <Id>View.State.Netstat.Computer</Id>
+        <DisplayName>NetstatWatcher Computers</DisplayName>
+        <Description>Description for the new view</Description>
+        <Target>Network.Windows.Computer.NetstatWatcher.Computer</Target>
+        <Category>Operations</Category>
+      </CustomViewConfig>
+    </Instance>
+    <Instance ID="Instancea438086f87d84054946d6e0004b4abea" Type="Microsoft.SystemCenter.Authoring.CodeGeneration.Monitoring.CustomView" Version="1.0.0.0">
+      <CustomViewConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <ViewFolder>Network.Windows.Computer.NetstatWatcher.Folders</ViewFolder>
+        <ViewType>SC!Microsoft.SystemCenter.StateViewType</ViewType>
+        <ViewConfiguration>&lt;Presentation&gt;&lt;ColumnInfo Index="0" Grouped="false" IsSortable="true" Sorted="true" SortIndex="-1" Visible="true" SortOrder="Descending" Width="120"&gt;&lt;Name&gt;State&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="1" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120"&gt;&lt;Name&gt;ComputerName&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection/ComputerName&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="2" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40"&gt;&lt;Name&gt;localIP&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection/localIP&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="3" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40"&gt;&lt;Name&gt;remoteIP&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection/remoteIP&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="4" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120"&gt;&lt;Name&gt;remoteName&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection/remoteName&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="5" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="20"&gt;&lt;Name&gt;remotePort&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection/remotePort&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="6" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120"&gt;&lt;Name&gt;procName&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection/procName&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="7" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="340"&gt;&lt;Name&gt;comment&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.TcpConnection/comment&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;/Presentation&gt;</ViewConfiguration>
+        <Visible>true</Visible>
+        <Accessibility>Internal</Accessibility>
+        <Id>View.State.Netstat.TcpConnection</Id>
+        <DisplayName>NetstatWatcher tcpConnections</DisplayName>
+        <Description>Description for the new view</Description>
+        <Target>Network.Windows.Computer.NetstatWatcher.TcpConnection</Target>
+        <Category>Operations</Category>
+      </CustomViewConfig>
+    </Instance>
+    <Instance ID="Instance5af47e00b257429895190f8376aed321" Type="Microsoft.SystemCenter.Authoring.CodeGeneration.Monitoring.CustomView" Version="1.0.0.0">
+      <CustomViewConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <ViewFolder>Network.Windows.Computer.NetstatWatcher.Folders</ViewFolder>
+        <ViewType>SC!Microsoft.SystemCenter.AlertViewType</ViewType>
+        <ViewConfiguration>&lt;Criteria&gt;&lt;ResolutionState&gt;&lt;StateRange Operator="NotEquals"&gt;255&lt;/StateRange&gt;&lt;/ResolutionState&gt;&lt;/Criteria&gt;</ViewConfiguration>
+        <Visible>true</Visible>
+        <Accessibility>Internal</Accessibility>
+        <Id>View.Alerts.Netstat.Computer</Id>
+        <DisplayName>NetstatWatcher Alerts</DisplayName>
+        <Description>Description for the new view</Description>
+        <Target>Network.Windows.Computer.NetstatWatcher.Computer</Target>
+        <Category>Operations</Category>
+      </CustomViewConfig>
+    </Instance>
+    <Instance ID="Instance0102a39d79904255b7da24b36e76f684" Type="Microsoft.SystemCenter.Authoring.CodeGeneration.Monitoring.CustomView" Version="1.0.0.0">
+      <CustomViewConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <ViewFolder>Network.Windows.Computer.NetstatWatcher.Folders</ViewFolder>
+        <ViewType>SC!Microsoft.SystemCenter.StateViewType</ViewType>
+        <ViewConfiguration>&lt;Presentation&gt;&lt;ColumnInfo Index="0" Grouped="false" IsSortable="true" Sorted="true" SortIndex="-1" Visible="true" SortOrder="Descending" Width="120"&gt;&lt;Name&gt;State&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.ListeningPort&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="1" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="160"&gt;&lt;Name&gt;ComputerName&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.ListeningPort/ComputerName&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="2" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40"&gt;&lt;Name&gt;localIP&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.ListeningPort/localIP&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="3" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40"&gt;&lt;Name&gt;localPort&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.ListeningPort/localPort&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="4" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40"&gt;&lt;Name&gt;ipProtocol&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.ListeningPort/ipProtocol&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="5" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120"&gt;&lt;Name&gt;procName&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.ListeningPort/procName&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;ColumnInfo Index="6" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="340"&gt;&lt;Name&gt;comment&lt;/Name&gt;&lt;Id&gt;Network.Windows.Computer.NetstatWatcher.ListeningPort/comment&lt;/Id&gt;&lt;/ColumnInfo&gt;&lt;/Presentation&gt;</ViewConfiguration>
+        <Visible>true</Visible>
+        <Accessibility>Internal</Accessibility>
+        <Id>View.State.Netstat.listeningPort</Id>
+        <DisplayName>NetstatWatcher listeningPorts</DisplayName>
+        <Description>Description for the new view</Description>
+        <Target>Network.Windows.Computer.NetstatWatcher.ListeningPort</Target>
+        <Category>Operations</Category>
+      </CustomViewConfig>
+    </Instance>
+  </Instances>
+</TemplateGroup>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack SchemaVersion="2.0" ContentReadable="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Manifest>
+    <Identity>
+      <ID>Network.Windows.Server.NetstatInfo</ID>
+      <Version>1.0.0.15</Version>
+    </Identity>
+    <Name>Network.Windows.Computer.NetstatWatcher</Name>
+    <References>
+      <Reference Alias="SC">
+        <ID>Microsoft.SystemCenter.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Windows">
+        <ID>Microsoft.Windows.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="System">
+        <ID>System.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+    </References>
+  </Manifest>
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.Computer" Base="Windows!Microsoft.Windows.ComputerRole" Accessibility="Public" Abstract="false" Hosted="true" Singleton="false">
+          <Property ID="FilePath" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.TcpConnection" Base="System!System.LogicalEntity" Accessibility="Public" Abstract="false" Hosted="false" Singleton="false">
+          <Property ID="ComputerName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="Key" Type="string" AutoIncrement="false" Key="true" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localPort" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remoteIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remoteName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remotePort" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="procName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="512" MinLength="0" Required="false" Scale="0" />
+          <Property ID="procPath" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" Scale="0" />
+          <Property ID="procStartTime" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="comment" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+      </ClassTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="Network.Windows.Server.NetstatInfo.Discovery.NetstatWatcher.Computer" Target="Windows!Microsoft.Windows.Computer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="Network.Windows.Computer.NetstatWatcher.Computer" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.FilteredRegistryDiscoveryProvider">
+          <ComputerName>$Target/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+          <RegistryAttributeDefinitions>
+            <RegistryAttributeDefinition>
+              <AttributeName>KeyExists</AttributeName>
+              <Path>SOFTWARE\ABCIT\NetstatWatcher</Path>
+              <PathType>0</PathType>
+              <AttributeType>0</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>FilePath</AttributeName>
+              <Path>SOFTWARE\ABCIT\NetstatWatcher\FilePath</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+          </RegistryAttributeDefinitions>
+          <Frequency>86400</Frequency>
+          <ClassId>$MPElement[Name="Network.Windows.Computer.NetstatWatcher.Computer"]$</ClassId>
+          <InstanceSettings>
+            <Settings>
+              <Setting>
+                <Name>$MPElement[Name="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Name>
+                <Value>$Target/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="System!System.Entity"]/DisplayName$</Name>
+                <Value>$Target/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="Network.Windows.Computer.NetstatWatcher.Computer"]/FilePath$</Name>
+                <Value>$Data/Values/FilePath$</Value>
+              </Setting>
+            </Settings>
+          </InstanceSettings>
+          <Expression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery>Values/KeyExists</XPathQuery>
+              </ValueExpression>
+              <Operator>Equal</Operator>
+              <ValueExpression>
+                <Value>true</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </Expression>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <Presentation>
+    <Folders>
+      <Folder ID="Network.Windows.Computer.NetstatWatcher.Folders" Accessibility="Internal" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
+      <Folder ID="Network.Windows.Computer.NetstatWatcher.Folders.State" Accessibility="Public" ParentFolder="Network.Windows.Computer.NetstatWatcher.Folders" />
+      <Folder ID="Network.Windows.Computer.NetstatWatcher.Folders.Alerts" Accessibility="Public" ParentFolder="Network.Windows.Computer.NetstatWatcher.Folders" />
+    </Folders>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Folders">
+          <Name>Network Windows Computer NetstatWatcher</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Folders.State">
+          <Name>State</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Folders.Alerts">
+          <Name>Alerts</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer">
+          <Name>Network Windows Computer NetstatWatcher Server</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer" SubElementID="FilePath">
+          <Name>FilePath</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection">
+          <Name>Network Windows Server NetstatWatcher TcpConnection</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="ComputerName">
+          <Name>ComputerName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="Key">
+          <Name>Key</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="localIP">
+          <Name>localIP</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="localName">
+          <Name>localName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="localPort">
+          <Name>localPort</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="procName">
+          <Name>procName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="procPath">
+          <Name>procPath</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="procStartTime">
+          <Name>procStartTime</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remoteIP">
+          <Name>remoteIP</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remoteName">
+          <Name>remoteName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remotePort">
+          <Name>remotePort</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="comment">
+          <Name>comment</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Server.NetstatInfo.Discovery.NetstatWatcher.Computer">
+          <Name>Discovery NestatInfo Computer</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles></KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPack>

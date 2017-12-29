@@ -1,0 +1,19 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Categories>
+    <Category ID="Network.Windows.Computer.NetstatWatcher.Computer.Category" Target="Network.Windows.Computer.NetstatWatcher.Computer.Icon" Value="System!System.Internal.ManagementPack.Images.DiagramIcon" />
+    <Category ID="Network.Windows.Computer.NetstatWatcher.TcpConnection.Category" Target="Network.Windows.Computer.NetstatWatcher.TcpConnection.Icon" Value="System!System.Internal.ManagementPack.Images.DiagramIcon" />
+    <Category ID="Network.Windows.Computer.NetstatWatcher.ListeningPort.Category" Target="Network.Windows.Computer.NetstatWatcher.ListeningPort.Icon" Value="System!System.Internal.ManagementPack.Images.DiagramIcon" />
+  </Categories>
+  <Presentation>
+    <ImageReferences>
+      <ImageReference ElementID="Network.Windows.Computer.NetstatWatcher.Computer" ImageID="Network.Windows.Computer.NetstatWatcher.Computer.Icon"/>
+      <ImageReference ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" ImageID="Network.Windows.Computer.NetstatWatcher.TcpConnection.Icon"/>
+      <ImageReference ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" ImageID="Network.Windows.Computer.NetstatWatcher.ListeningPort.Icon"/>
+    </ImageReferences>
+  </Presentation>
+  <Resources>
+    <Image ID="Network.Windows.Computer.NetstatWatcher.Computer.Icon" FileName="netstatWatcherComputerT.png" Accessibility="Public" HasNullStream="false" Comment="netstatWatcher Computer" />
+    <Image ID="Network.Windows.Computer.NetstatWatcher.TcpConnection.Icon" FileName="netstatWatcherConnectionT.png" Accessibility="Public" HasNullStream="false" Comment="netstatWatcher Connection" />
+    <Image ID="Network.Windows.Computer.NetstatWatcher.ListeningPort.Icon" FileName="netstatWatcherPortT.png" Accessibility="Public" HasNullStream="false" Comment="netstatWatcher Port" />
+  </Resources>
+</ManagementPackFragment>

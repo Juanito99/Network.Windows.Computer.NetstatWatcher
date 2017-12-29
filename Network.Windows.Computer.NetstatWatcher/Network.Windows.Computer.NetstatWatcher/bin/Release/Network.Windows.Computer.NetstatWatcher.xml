@@ -1,0 +1,2054 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack SchemaVersion="2.0" ContentReadable="true" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Manifest>
+    <Identity>
+      <ID>Network.Windows.Computer.NetstatWatcher</ID>
+      <Version>1.0.0.182</Version>
+    </Identity>
+    <Name>Network.Windows.Computer.NetstatWatcher</Name>
+    <References>
+      <Reference Alias="SC">
+        <ID>Microsoft.SystemCenter.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Windows">
+        <ID>Microsoft.Windows.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="Health">
+        <ID>System.Health.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="System">
+        <ID>System.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+    </References>
+  </Manifest>
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.Computer" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.ComputerRole" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="FilePath" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="NodeName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.TcpConnection" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="ComputerName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="Key" Type="string" AutoIncrement="false" Key="true" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remoteIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remoteName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remotePort" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="procName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="512" MinLength="0" Required="false" Scale="0" />
+          <Property ID="comment" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.ListeningPort" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="ComputerName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="Key" Type="string" AutoIncrement="false" Key="true" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localPort" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="ipProtocol" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="procName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="512" MinLength="0" Required="false" Scale="0" />
+          <Property ID="comment" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+      </ClassTypes>
+      <RelationshipTypes>
+        <RelationshipType ID="Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Source" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.Computer" />
+          <Target ID="Target" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.TcpConnection" />
+        </RelationshipType>
+        <RelationshipType ID="Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Source" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.Computer" />
+          <Target ID="Target" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.ListeningPort" />
+        </RelationshipType>
+      </RelationshipTypes>
+    </EntityTypes>
+    <ModuleTypes>
+      <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="DS" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <SyncTime>$Config/SyncTime$</SyncTime>
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>
+                <Threshold>$Config/Threshold$</Threshold>
+                <Key>$Config/Key$</Key>
+              </DataSource>
+              <ConditionDetection ID="Filter" TypeID="System!System.ExpressionFilter">
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery Type="String">Property[@Name="Key"]</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value Type="String">$Config/Key$</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+              </ConditionDetection>
+            </MemberModules>
+            <Composition>
+              <Node ID="Filter">
+                <Node ID="DS" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Schedule" TypeID="System!System.SimpleScheduler">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <SyncTime>$Config/SyncTime$</SyncTime>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>
+                <Threshold>$Config/Threshold$</Threshold>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe">
+                <Node ID="Schedule" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      <ProbeActionModuleType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe" Accessibility="Internal" Batching="false" PassThrough="false">
+        <Configuration>
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="PSScript" TypeID="Windows!Microsoft.Windows.PowerShellPropertyBagProbe">
+                <ScriptName>MonitorNetstatWatcherItems.ps1</ScriptName>
+                <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$MonitorItem)
+
+
+$api           = New-Object -ComObject 'MOM.ScriptAPI'
+$discoveryData = $api.CreateDiscoveryData(0, $sourceId, $managedEntityId)
+
+$Global:Error.Clear()
+$script:ErrorView      = 'NormalView'
+$ErrorActionPreference = 'Continue'
+
+$testedAt              = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+
+$localComputerName     = $env:COMPUTERNAME
+$localComputerDomain   = ([System.DirectoryServices.ActiveDirectory.Domain]::GetComputerDomain()).Name
+$localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)) | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString	| Select-Object -First 1
+
+$regPath               = 'HKLM:\SOFTWARE\ABCIT\NetstatWatcher'
+$filePath              = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty FilePath
+
+$netStatIpFile         = $filePath + '\' + 'netstatIp.txt'		
+
+
+$regIPPat              = '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+$regNamePat            = '[a-zA-Z]{1,}[-_\.]?[0-9]?'
+		 
+ 
+if (Test-Path -Path $netStatIpFile) {
+	Remove-Item -Path $netStatIpFile -Force
+}       		
+		
+
+Function Format-NetstatData {
+
+	param(
+		[Parameter(Mandatory=$true)][object]$netstatInPut,
+		[Parameter(Mandatory=$true)][string]$qryType,				
+		[Parameter(Mandatory=$true)][ref]$nestatIPData
+	)
+
+	$allProcesses    = Get-Process | Select-Object -Property Name, id
+	$netStatConnects = New-Object -TypeName System.Collections.Generic.List[object]
+	$netStatArr      =  $netstatInPut -split "`r`n"						
+
+	$netStatArr | ForEach-Object {
+
+		$netStatItm = $_
+
+		if ($netStatItm -match "\d") {       
+
+			$netStatItmParts = [Regex]::Split($netStatItm,"\s{2,}")							
+
+			if ($qryType -eq 'tcpConnection') {
+			
+				$proto           = $netStatItmParts[1]					
+				$localIP         = ($netStatItmParts[2] -split ':')[0]
+				$localPort       = ($netStatItmParts[2] -split ':')[1]					
+				$remoteIP        = ($netStatItmParts[3] -split ':')[0]
+				$remotePort      = ($netStatItmParts[3] -split ':')[1]
+				$connectState    = $netStatItmParts[4]
+				$procId          = $netStatItmParts[5]
+				
+				$procInfo = $allProcesses | Where-Object { $_.id -eq $procId }
+				$procName = $procInfo.Name												
+
+				if ($localIPAddresses -contains $localIP) {
+					$localName = $localComputerName
+				}					
+			
+				if (($localIp -match $regIpPat -and $remoteIp -match $regIpPat) -and ($remoteIP -notmatch '0.0.0.0|127.0.0.1') ) {
+					$myNetHsh = @{'proto' = $proto}
+					$myNetHsh.Add('localIP', $localIP)
+					$myNetHsh.Add('localName', $localName)						
+					$myNetHsh.Add('remoteIP', $remoteIP)
+					$myNetHsh.Add('remotePort', $remotePort)
+					$myNetHsh.Add('connectState', $connectState)
+					$myNetHsh.Add('procId', $procId)
+					$myNetHsh.Add('procName', $procName)					
+
+					$myNetObj = New-Object -TypeName PSObject -Property $myNetHsh
+					$null     = $netStatConnects.Add($myNetObj)    
+				}
+
+			} else {
+
+				$proto               = $netStatItmParts[1]		
+
+				if ($proto -ieq 'TCP') {
+					$localIP         = ($netStatItmParts[2] -split ':')[0]
+					$localPort       = ($netStatItmParts[2] -split ':')[1]					
+					$remoteIP        = ($netStatItmParts[3] -split ':')[0]
+					$remotePort      = ($netStatItmParts[3] -split ':')[1]
+					$connectState    = $netStatItmParts[4]
+					$procId          = $netStatItmParts[5]					
+				} else {
+					$localIP         = ($netStatItmParts[2] -split ':')[0]
+					$localPort       = ($netStatItmParts[2] -split ':')[1]					
+					$remoteIP        = ($netStatItmParts[3] -split ':')[0]
+					$remotePort      = ($netStatItmParts[3] -split ':')[1]
+					$connectState    = '-'
+					$procId          = $netStatItmParts[4]					
+				}				
+							
+				$procInfo = $allProcesses | Where-Object { $_.id -eq $procId }
+				$procName = $procInfo.Name								
+				
+				if ($localIPAddresses -contains $localIP) {
+					$localName = $localComputerName
+				}					
+
+				if (($localIp -match $regIpPat) -and ($remoteIP -match '\*|0.0.0.0|127.0.0.1') ) {
+					$myNetHsh = @{'proto' = $proto}
+					$myNetHsh.Add('localIP', $localIP)
+					$myNetHsh.Add('localName', $localName)													
+					$myNetHsh.Add('localPort', $localPort)						
+					$myNetHsh.Add('connectState', $connectState)
+					$myNetHsh.Add('procId', $procId)
+					$myNetHsh.Add('procName', $procName)											
+
+					$myNetObj = New-Object -TypeName PSObject -Property $myNetHsh
+					$null     = $netStatConnects.Add($myNetObj)    
+				} 
+
+			} # END if ($qryType -eq 'tcpConnect')										
+
+		} #END if ($netStatItm -match "\d") 
+
+	} #END $netStatIpArr | ForEach-Object {} 
+
+	If ($netStatConnects.count -gt 0) {
+		$rtn = $true
+		$nestatIPData.Value = $netStatConnects
+	} else {
+		$rtn = $false	
+	}
+
+	$rtn
+
+} #END Funciton Format-NetstatIPData		
+
+
+Invoke-Expression "C:\Windows\System32\netstat.exe -ano" | Out-File -FilePath $netStatIpFile
+$netStatIp = Get-Content -Path $netStatIpFile | Out-String		
+
+$netStatIPConnects = New-Object -TypeName System.Collections.Generic.List[object]
+Format-NetstatData -netstatInPut $netStatIp -qryType $MonitorItem -nestatIPData ([ref]$netStatIPConnects)			
+
+
+
+if($MonitorItem -eq 'tcpConnection') {
+
+	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+	
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {				
+				
+		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath		
+		
+		foreach ($tcpConnect in $monitoredTcpConnects) {
+
+			$remoteIP        = ''
+			$remoteName      = ''
+			$remotePort      = ''
+			$comment         = ''
+			$procName        = ''
+			$connectDetails  = ''
+			$connectionState = ''
+
+			$remoteIP        = $tcpConnect.remoteIP
+			$remoteName      = $tcpConnect.remoteName
+			$remotePort      = $tcpConnect.remotePort
+			$comment         = $tcpConnect.comment
+			$procName        = $tcpConnect.procName			
+						
+			if ($remoteName -and ([String]::IsNullOrEmpty($remoteIP))) {
+				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
+			} 
+			
+			if ($remotePort -and $remoteIP) {	
+				
+				$connectDetails = $netStatIPConnects | Where-Object { $_.remotePort -eq $remotePort -and $_.remoteIP -eq $remoteIP }							
+				
+				if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails)) {
+					
+					$localIP         = $localIPAddresses					
+					$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+					$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+					$connectionState = 'No active connection found.'									
+				
+					$state           = 'Red'
+					$localName       = 'NA'
+					$localPort       = 'NA'										
+					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName)`n ConnecionState: $($connectionState)`n"
+					$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"								
+											
+					$bag = $api.CreatePropertybag()								
+					$bag.AddValue("Key",$key)		
+					$bag.AddValue("State",$state)				
+					$bag.AddValue("Supplement",$supplement)		
+					$bag.AddValue("TestedAt",$testedAt)			
+					$bag	
+
+					continue
+					
+				} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))							
+				
+
+				foreach ($connDetail in $connectDetails) {								
+
+					$connectionState = ''
+					$supplement      = ''
+
+					$localIP         = $connDetail.localIP
+					$localName       = $connDetail.localName												
+
+					if ([String]::IsNullOrEmpty($remoteName)) {
+						$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+						if ($tmpName -ne $remoteIP) {
+							$tmpName    = $tmpName -replace $localComputerDomain,''
+							$tmpName    = $tmpName -replace '\.',''
+							$remoteName = $tmpName          
+						} else {
+							$remoteName = 'No reverse record in DNS.'
+						}
+					}
+
+					if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+						$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+						if ($tmpName -ne $remoteIP) {
+							$tmpName    = $tmpName -replace $localComputerDomain,''
+							$tmpName    = $tmpName -replace '\.',''
+							$remoteName = $tmpName
+						} else {
+							$remoteName = 'No reverse record in DNS.'
+						}
+					}
+
+					$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+					$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+					$connectionState = $connDetail.connectState
+
+					$supplement      = "localIP: $($localIP)`t  `n procName: $($procName)`t `n ConnecionState: $($connectionState)`n"
+					$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"						
+
+					if ($connectionState -eq 'ESTABLISHED') {
+						$state       = 'Green'						
+					} elseif ($connectionState -eq 'TIME_WAIT') {						
+						$state       = 'Yellow'
+						$supplement += 'TIME_WAIT = Local endpoint (this computer) has closed the connection.'
+					} else {
+						$state       = 'Red'
+						$supplement += 'CLOSE_WAIT = Remote endpoint (this computer) has closed the connection.'
+					}																						
+
+					$bag = $api.CreatePropertybag()								
+					$bag.AddValue("Key",$key)		
+					$bag.AddValue("State",$state)				
+					$bag.AddValue("Supplement",$supplement)		
+					$bag.AddValue("TestedAt",$testedAt)			
+					$bag										
+						
+				} #END foreach ($connDetail in $connectDetails)
+
+						
+			} else {
+
+				$foo = 'No details this time, not sending to inventory.'
+
+			} # END	if ($connectDetails)					
+		
+		} #END foreach($tcpConnect in $monitoredTcpConnects)
+
+
+	} else {
+
+		$api.LogScriptEvent('Monitor NetStatWatcher Three State.ps1',3002,1,"NetStatWatcherMon MonitorItem $($MonitorItem) - File not found in $($monitoredTcpConnectsFilePath)")
+
+	}
+
+} elseif ($MonitorItem -eq 'listeningPort') {
+	
+
+	$monitoredListeningPortsFilePath = $filePath + '\' + 'monitoredListeningPorts.csv'
+	
+	if (Test-Path -Path $monitoredListeningPortsFilePath) {	
+
+		$monitoredListeningPorts = Import-Csv -Path $monitoredListeningPortsFilePath			
+
+		foreach($listenPort in $monitoredListeningPorts) {
+			
+			$localIP       = ''
+			$localPort     = ''
+			$ipProtocol    = ''
+			$procName      = '' 
+			$comment       = ''
+			$listenDetails = ''
+			$state         = ''
+			
+			$localIP       = $listenPort.localIP
+			$localPort     = $listenPort.localPort
+			$ipProtocol    = ($listenPort.ipProtocol).ToUpper()
+			$procName      = $listenPort.procName
+			$comment       = $listenPort.comment
+
+			if ($localPort -and $ipProtocol -and $procName) {
+
+				if ([string]::IsNullOrEmpty($localIP)) {
+					$localIP = '-'
+				}
+
+				if ([string]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}
+				
+				$supplement    =  "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `t proto: $($ipProtocol)"						
+
+				$listenDetails = $netStatIPConnects | Where-Object { ($_.procName -imatch $procName) -and ($_.proto -imatch $ipProtocol) -and ($_.localPort -imatch $localPort) }
+				
+				if ([string]::IsNullOrEmpty($listenDetails) -or [string]::IsNullOrWhiteSpace($listenDetails)) {								
+					
+					$Key             = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
+					$connectionState = 'No active connection found.'											
+					$state           = 'Red'					
+													
+					$bag = $api.CreatePropertybag()								
+					$bag.AddValue("Key",$key)		
+					$bag.AddValue("State",$state)				
+					$bag.AddValue("Supplement",$supplement)		
+					$bag.AddValue("TestedAt",$testedAt)			
+					$bag	
+
+					continue
+					
+				} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))							
+												
+				foreach ($listener in $listenDetails) {
+
+					$localIP         = ''
+					$localPort       = ''
+					$ipProtocol      = ''
+					$procName        = '' 
+					$comment         = ''
+					$connectionState = ''
+					$state           = ''										
+
+					$localIP         = $listener.localIP
+					$localPort       = $listener.localPort
+					$ipProtocol      = ($listener.proto).ToUpper()
+					$procName        = $listener.procName
+					$comment         = $listener.comment
+					$connectionState = $listener.connectState					
+					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `C.S.: $($connectionState))"	
+
+					if ([string]::IsNullOrEmpty($localIP)) {
+						$localIP = '-'
+					}
+
+					if ([string]::IsNullOrEmpty($comment)) {
+						$comment = '-'
+					}					
+
+					if ($ipProtocol -ieq 'TCP') {
+						if ($connectionState -eq 'LISTENING') {
+							$state       = 'Green'						
+						} elseif ($connectionState -eq 'TIME_WAIT') {						
+							$state       = 'Yellow'
+							$supplement += "`nTIME_WAIT = Local endpoint (this computer) has closed the connection."
+						} else {
+							$state       = 'Red'
+							$supplement += "`nCLOSE_WAIT = Remote endpoint (this computer) has closed the connection."
+						}																		
+					} else {
+						$state       = 'Green'
+						$supplement += "`nUDP - No additional information exposted. "					
+					} # END if ($ipProtocol -eq 'TCP')		
+										
+					
+					$Key = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"								
+					
+					$bag = $api.CreatePropertybag()								
+					$bag.AddValue("Key",$key)		
+					$bag.AddValue("State",$state)				
+					$bag.AddValue("Supplement",$supplement)		
+					$bag.AddValue("TestedAt",$testedAt)			
+					$bag															
+
+				} #END foreach ($listener in $listenDetails)
+				
+			} #END if ($localPort -and $ipProtocol -and $procName)
+
+		} #END foreach($listenPort in $monitoredListeningPorts)
+		
+	} #END if (Test-Path -Path $monitoredListeningPortsFilePath)		
+
+} else {
+
+	$foo = 'Invalid discovery paramater'
+
+}]]></ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>MonitorItem</Name>
+                    <Value>$Config/MonitorItem$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>Threshold</Name>
+                    <Value>$Config/Threshold$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>300</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="PSScript" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+        <InputType>System!System.BaseData</InputType>
+      </ProbeActionModuleType>
+    </ModuleTypes>
+    <MonitorTypes>
+      <UnitMonitorType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" Accessibility="Public">
+        <MonitorTypeStates>
+          <MonitorTypeState ID="UnderThreshold" NoDetection="false" />
+          <MonitorTypeState ID="OverWarningThreshold" NoDetection="false" />
+          <MonitorTypeState ID="OverErrorThreshold" NoDetection="false" />
+        </MonitorTypeStates>
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />
+        </OverrideableParameters>
+        <MonitorImplementation>
+          <MemberModules>
+            <DataSource ID="DataSource" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered">
+              <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+              <SyncTime>$Config/SyncTime$</SyncTime>
+              <MonitorItem>$Config/MonitorItem$</MonitorItem>
+              <Key>$Config/Key$</Key>
+              <Threshold>$Config/Threshold$</Threshold>
+            </DataSource>
+            <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
+            <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
+              <MonitorItem>$Config/MonitorItem$</MonitorItem>
+              <Threshold>$Config/Threshold$</Threshold>
+            </ProbeAction>
+            <ConditionDetection ID="FilterUnderThreshold" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Green</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+            <ConditionDetection ID="FilterOverWarningThreshold" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Yellow</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+            <ConditionDetection ID="FilterOverErrorThreshold" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Red</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+          </MemberModules>
+          <RegularDetections>
+            <RegularDetection MonitorTypeStateID="UnderThreshold">
+              <Node ID="FilterUnderThreshold">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+            <RegularDetection MonitorTypeStateID="OverWarningThreshold">
+              <Node ID="FilterOverWarningThreshold">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+            <RegularDetection MonitorTypeStateID="OverErrorThreshold">
+              <Node ID="FilterOverErrorThreshold">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+          </RegularDetections>
+        </MonitorImplementation>
+      </UnitMonitorType>
+    </MonitorTypes>
+  </TypeDefinitions>
+  <Categories>
+    <Category ID="Network.Windows.Computer.NetstatWatcher.Computer.Category" Target="Network.Windows.Computer.NetstatWatcher.Computer.Icon" Value="System!System.Internal.ManagementPack.Images.DiagramIcon" />
+    <Category ID="Network.Windows.Computer.NetstatWatcher.TcpConnection.Category" Target="Network.Windows.Computer.NetstatWatcher.TcpConnection.Icon" Value="System!System.Internal.ManagementPack.Images.DiagramIcon" />
+    <Category ID="Network.Windows.Computer.NetstatWatcher.ListeningPort.Category" Target="Network.Windows.Computer.NetstatWatcher.ListeningPort.Icon" Value="System!System.Internal.ManagementPack.Images.DiagramIcon" />
+  </Categories>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.Computer" Target="Windows!Microsoft.Windows.Computer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="Network.Windows.Computer.NetstatWatcher.Computer" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.FilteredRegistryDiscoveryProvider">
+          <ComputerName>$Target/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+          <RegistryAttributeDefinitions>
+            <RegistryAttributeDefinition>
+              <AttributeName>KeyExists</AttributeName>
+              <Path>SOFTWARE\ABCIT\NetstatWatcher</Path>
+              <PathType>0</PathType>
+              <AttributeType>0</AttributeType>
+            </RegistryAttributeDefinition>
+            <RegistryAttributeDefinition>
+              <AttributeName>FilePath</AttributeName>
+              <Path>SOFTWARE\ABCIT\NetstatWatcher\FilePath</Path>
+              <PathType>1</PathType>
+              <AttributeType>1</AttributeType>
+            </RegistryAttributeDefinition>
+          </RegistryAttributeDefinitions>
+          <Frequency>86400</Frequency>
+          <ClassId>$MPElement[Name="Network.Windows.Computer.NetstatWatcher.Computer"]$</ClassId>
+          <InstanceSettings>
+            <Settings>
+              <Setting>
+                <Name>$MPElement[Name="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Name>
+                <Value>$Target/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="System!System.Entity"]/DisplayName$</Name>
+                <Value>$Target/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="Network.Windows.Computer.NetstatWatcher.Computer"]/FilePath$</Name>
+                <Value>$Data/Values/FilePath$</Value>
+              </Setting>
+              <Setting>
+                <Name>$MPElement[Name="Network.Windows.Computer.NetstatWatcher.Computer"]/NodeName$</Name>
+                <Value>$Target/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+              </Setting>
+            </Settings>
+          </InstanceSettings>
+          <Expression>
+            <SimpleExpression>
+              <ValueExpression>
+                <XPathQuery>Values/KeyExists</XPathQuery>
+              </ValueExpression>
+              <Operator>Equal</Operator>
+              <ValueExpression>
+                <Value>true</Value>
+              </ValueExpression>
+            </SimpleExpression>
+          </Expression>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsListeningPort" Target="Network.Windows.Computer.NetstatWatcher.Computer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryRelationship TypeID="SC!Microsoft.SystemCenter.HealthServiceShouldManageEntity" />
+          <DiscoveryRelationship TypeID="Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
+          <IntervalSeconds>3600</IntervalSeconds>
+          <SyncTime />
+          <ScriptName>DiscoverNetstatWatcherItemRelations.ps1</ScriptName>
+          <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$discoveryItem,$filePath,$ComputerName)
+
+
+$api                   = New-Object -ComObject 'MOM.ScriptAPI'
+$discoveryData         = $api.CreateDiscoveryData(0, $sourceId, $managedEntityId)
+
+$Global:Error.Clear()
+$script:ErrorView      = 'NormalView'
+$ErrorActionPreference = 'Continue'
+
+$localComputerName     = $env:COMPUTERNAME
+$localComputerDomain   = ([System.DirectoryServices.ActiveDirectory.Domain]::GetComputerDomain()).Name
+$localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)) | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString	| Select-Object -First 1
+
+
+if($discoveryItem -eq 'tcpConnection') {
+
+	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {						     		 		
+		
+		$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+		$monitoredTcpConnects         = Import-Csv -Path $monitoredTcpConnectsFilePath
+
+		$srcInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']$")		
+		$srcInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)	
+		$srcInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']/FilePath$", $filePath)		
+		$discoveryData.AddInstance($srcInstance)
+		
+		$healthInstance = $discoveryData.CreateClassInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthService']$")		
+		$healthInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)			
+		$discoveryData.AddInstance($healthInstance)
+
+
+		foreach($tcpConnect in $monitoredTcpConnects) {
+
+			$remoteIP       = ''
+			$remoteName     = ''
+			$remotePort     = ''
+			$comment        = ''
+			$procName       = ''
+			$connectDetails = ''
+
+			$remoteIP       = $tcpConnect.remoteIP
+			$remoteName     = $tcpConnect.remoteName
+			$remotePort     = $tcpConnect.remotePort
+			$comment        = $tcpConnect.comment
+			$procName       = $tcpConnect.procName
+			
+
+			if ($remoteName -and (-not $remoteIP)) {
+				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
+			}
+			
+			if ($remotePort -and $remoteIP -and $procName) {
+					
+				if ([String]::IsNullOrEmpty($remoteName)) {
+					$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName          
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}				
+
+				if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+					$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}
+
+				if ([String]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}
+
+				$displayName = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+				$Key         = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+				$targetInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']$")	
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/ComputerName$",$localComputerName)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/Key$",$Key)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localIP$",$localIPAddresses)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localName$",$localComputerName)					
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteIP$",$remoteIP)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteName$",$remoteName)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remotePort$",$remotePort)				
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/comment$",$comment)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/procName$",$procName)																					
+				$discoveryData.AddInstance($targetInstance)
+								
+				$relHealthInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthServiceShouldManageEntity']$")
+				$relHealthInstance.Source = $healthInstance
+				$relHealthInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relHealthInstance)
+					
+				$relInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection']$")
+				$relInstance.Source = $srcInstance
+				$relInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relInstance)					
+										
+			} else {
+
+				$foo = 'No details this time, not sending to inventory.'
+
+			} # END	if ($remotePort -and $remoteIP -and $procName)
+		
+		} #END foreach($tcpConnect in $monitoredTcpConnects)		
+
+	} else {
+
+		$foo = 'Invalid data'
+
+	}
+
+} elseif ($discoveryItem -eq 'listeningPort') {
+
+	$monitoredListeningPortsFilePath = $filePath + '\' + 'monitoredListeningPorts.csv'
+	
+   if (Test-Path -Path $monitoredListeningPortsFilePath) {	
+
+		$monitoredListeningPorts = Import-Csv -Path $monitoredListeningPortsFilePath
+
+		$srcInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']$")		
+		$srcInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)	
+		$srcInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']/FilePath$", $filePath)		
+		$discoveryData.AddInstance($srcInstance)
+		
+		$healthInstance = $discoveryData.CreateClassInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthService']$")		
+		$healthInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)			
+		$discoveryData.AddInstance($healthInstance)		
+
+		foreach($listenPort in $monitoredListeningPorts) {
+			
+			$localIP    = ''
+			$localPort  = ''
+			$ipProtocol = ''
+			$procName   = '' 
+			$comment    = ''
+			
+			$localIP    = $listenPort.localIP
+			$localPort  = $listenPort.localPort
+			$ipProtocol = ($listenPort.ipProtocol).ToUpper()
+			$procName   = $listenPort.procName
+			$comment    = $listenPort.comment
+
+			if ($localPort -and $ipProtocol -and $procName) {
+
+				if ([string]::IsNullOrEmpty($localIP)) {
+					$localIP = '-'
+				}
+
+				if ([string]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}				
+
+				$displayName = 'listeningPort On  ' + $localComputerName + ':' + $localPort + ' For ' + $procName + ' ' + $ipProtocol
+				$Key         = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
+				
+				$targetInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']$")	
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ComputerName$",$localComputerName)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/Key$",$Key)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localIP$",$localIP)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localPort$",$localPort)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ipProtocol$",$ipProtocol)																		
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/comment$",$comment)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/procName$",$procName)										
+				$targetInstance.AddProperty("$MPElement[Name='System!System.Entity']/DisplayName$", $displayName)
+				$discoveryData.AddInstance($targetInstance)
+								
+				$relHealthInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthServiceShouldManageEntity']$")
+				$relHealthInstance.Source = $healthInstance
+				$relHealthInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relHealthInstance)
+					
+				$relInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort']$")
+				$relInstance.Source = $srcInstance
+				$relInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relInstance)
+
+			}
+
+		} #END foreach($listenPort in $monitoredListeningPorts)
+		
+	} #END if (Test-Path -Path $monitoredListeningPortsFilePath)		
+
+} else {
+
+	$foo = 'Invalid discovery paramater'
+
+}
+
+
+$discoveryData]]></ScriptBody>
+          <Parameters>
+            <Parameter>
+              <Name>sourceId</Name>
+              <Value>$MPElement$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>managedEntityId</Name>
+              <Value>$Target/Id$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>discoveryItem</Name>
+              <Value>listeningPort</Value>
+            </Parameter>
+            <Parameter>
+              <Name>filePath</Name>
+              <Value>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.Computer"]/FilePath$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>ComputerName</Name>
+              <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+            </Parameter>
+          </Parameters>
+          <TimeoutSeconds>300</TimeoutSeconds>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.listeningPorts" Target="Network.Windows.Computer.NetstatWatcher.Computer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="Network.Windows.Computer.NetstatWatcher.ListeningPort" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
+          <IntervalSeconds>1600</IntervalSeconds>
+          <SyncTime />
+          <ScriptName>DiscoverNetstatWatcherItems.ps1</ScriptName>
+          <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$discoveryItem,$filePath)
+
+
+$api           = New-Object -ComObject 'MOM.ScriptAPI'
+$discoveryData = $api.CreateDiscoveryData(0, $sourceId, $managedEntityId)
+
+$Global:Error.Clear()
+$script:ErrorView      = 'NormalView'
+$ErrorActionPreference = 'Continue'
+
+$localComputerName     = $env:COMPUTERNAME
+$localComputerDomain   = ([System.DirectoryServices.ActiveDirectory.Domain]::GetComputerDomain()).Name
+$localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)) | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString | Select-Object -First 1
+
+
+if ($discoveryItem -eq 'tcpConnection') {	
+
+	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {				
+						
+		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath			
+
+		foreach ($tcpConnect in $monitoredTcpConnects) {
+
+			$remoteIP       = ''
+			$remoteName     = ''
+			$remotePort     = ''
+			$procName       = ''
+			$comment        = ''
+			$connectDetails = ''
+			
+			$remoteIP       = $tcpConnect.remoteIP
+			$remoteName     = $tcpConnect.remoteName
+			$remotePort     = $tcpConnect.remotePort
+			$procName       = $tcpConnect.procName
+			$comment        = $tcpConnect.comment			
+						
+			if ($remoteName -and ([String]::IsNullOrEmpty($remoteIP))) {
+				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
+			}
+			
+			if ($remotePort -and $remoteIP -and $procName) {												
+
+				if ([String]::IsNullOrEmpty($remoteName)) {
+					$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName          
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}				
+
+				if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+					$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}
+
+				if ([String]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}
+									
+				$displayName = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+				$Key         = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+				
+				$instance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']$")	
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/ComputerName$",$localComputerName)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/Key$",$Key)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localIP$",$localIPAddresses)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localName$",$localComputerName)					
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteIP$",$remoteIP)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteName$",$remoteName)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remotePort$",$remotePort)				
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/comment$",$comment)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/procName$",$procName)										
+				$instance.AddProperty("$MPElement[Name='System!System.Entity']/DisplayName$", $displayName)
+				$discoveryData.AddInstance($instance)					
+
+			} else {
+
+				$foo = 'No details this time, not sending to inventory.'
+
+			} # END	if ($remotePort -and $remoteIP -and $procName)
+		
+		} #END foreach($tcpConnect in $monitoredTcpConnects)
+
+	} else {
+
+		$foo = 'Invalid data'
+
+	} #END if (Test-Path -Path $monitoredTcpConnectsFilePath)
+
+
+}  elseif ($discoveryItem -eq 'listeningPort') {
+
+	$monitoredListeningPortsFilePath = $filePath + '\' + 'monitoredListeningPorts.csv'
+	
+	if (Test-Path -Path $monitoredListeningPortsFilePath) {	
+
+	   $monitoredListeningPorts = Import-Csv -Path $monitoredListeningPortsFilePath
+		
+		foreach ($listenPort in $monitoredListeningPorts) {
+			
+			$localIP    = ''
+			$localPort  = ''
+			$ipProtocol = ''
+			$procName   = '' 
+			$comment    = ''
+			
+			$localIP    = $listenPort.localIP
+			$localPort  = $listenPort.localPort
+			$ipProtocol = ($listenPort.ipProtocol).ToUpper()
+			$procName   = $listenPort.procName
+			$comment    = $listenPort.comment
+
+			if ($localPort -and $ipProtocol -and $procName) {
+
+				if ([string]::IsNullOrEmpty($localIP)) {
+					$localIP = '-'
+				}
+
+				if ([string]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}				
+
+				$displayName = 'listeningPort On  ' + $localComputerName + ':' + $localPort + ' For ' + $procName + ' ' + $ipProtocol
+				$Key         = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
+
+				$instance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']$")	
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ComputerName$",$localComputerName)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/Key$",$Key)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localIP$",$localIP)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localPort$",$localPort)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ipProtocol$",$ipProtocol)																		
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/comment$",$comment)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/procName$",$procName)										
+				$instance.AddProperty("$MPElement[Name='System!System.Entity']/DisplayName$", $displayName)
+				$discoveryData.AddInstance($instance)
+
+			}
+
+		} #END foreach($listenPort in $monitoredListeningPorts)
+		
+	} #END if (Test-Path -Path $monitoredListeningPortsFilePath)		
+
+} else {
+
+	$foo = 'Invalid discovery paramater'
+
+}
+
+$discoveryData]]></ScriptBody>
+          <Parameters>
+            <Parameter>
+              <Name>sourceId</Name>
+              <Value>$MPElement$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>managedEntityId</Name>
+              <Value>$Target/Id$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>discoveryItem</Name>
+              <Value>listeningPort</Value>
+            </Parameter>
+            <Parameter>
+              <Name>filePath</Name>
+              <Value>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.Computer"]/FilePath$</Value>
+            </Parameter>
+          </Parameters>
+          <TimeoutSeconds>240</TimeoutSeconds>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.tcpConnections" Target="Network.Windows.Computer.NetstatWatcher.Computer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="Network.Windows.Computer.NetstatWatcher.TcpConnection" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
+          <IntervalSeconds>1800</IntervalSeconds>
+          <SyncTime />
+          <ScriptName>DiscoverNetstatWatcherItems.ps1</ScriptName>
+          <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$discoveryItem,$filePath)
+
+
+$api           = New-Object -ComObject 'MOM.ScriptAPI'
+$discoveryData = $api.CreateDiscoveryData(0, $sourceId, $managedEntityId)
+
+$Global:Error.Clear()
+$script:ErrorView      = 'NormalView'
+$ErrorActionPreference = 'Continue'
+
+$localComputerName     = $env:COMPUTERNAME
+$localComputerDomain   = ([System.DirectoryServices.ActiveDirectory.Domain]::GetComputerDomain()).Name
+$localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)) | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString | Select-Object -First 1
+
+
+if ($discoveryItem -eq 'tcpConnection') {	
+
+	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {				
+						
+		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath			
+
+		foreach ($tcpConnect in $monitoredTcpConnects) {
+
+			$remoteIP       = ''
+			$remoteName     = ''
+			$remotePort     = ''
+			$procName       = ''
+			$comment        = ''
+			$connectDetails = ''
+			
+			$remoteIP       = $tcpConnect.remoteIP
+			$remoteName     = $tcpConnect.remoteName
+			$remotePort     = $tcpConnect.remotePort
+			$procName       = $tcpConnect.procName
+			$comment        = $tcpConnect.comment			
+						
+			if ($remoteName -and ([String]::IsNullOrEmpty($remoteIP))) {
+				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
+			}
+			
+			if ($remotePort -and $remoteIP -and $procName) {												
+
+				if ([String]::IsNullOrEmpty($remoteName)) {
+					$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName          
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}				
+
+				if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+					$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}
+
+				if ([String]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}
+									
+				$displayName = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+				$Key         = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+				
+				$instance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']$")	
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/ComputerName$",$localComputerName)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/Key$",$Key)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localIP$",$localIPAddresses)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localName$",$localComputerName)					
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteIP$",$remoteIP)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteName$",$remoteName)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remotePort$",$remotePort)				
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/comment$",$comment)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/procName$",$procName)										
+				$instance.AddProperty("$MPElement[Name='System!System.Entity']/DisplayName$", $displayName)
+				$discoveryData.AddInstance($instance)					
+
+			} else {
+
+				$foo = 'No details this time, not sending to inventory.'
+
+			} # END	if ($remotePort -and $remoteIP -and $procName)
+		
+		} #END foreach($tcpConnect in $monitoredTcpConnects)
+
+	} else {
+
+		$foo = 'Invalid data'
+
+	} #END if (Test-Path -Path $monitoredTcpConnectsFilePath)
+
+
+}  elseif ($discoveryItem -eq 'listeningPort') {
+
+	$monitoredListeningPortsFilePath = $filePath + '\' + 'monitoredListeningPorts.csv'
+	
+	if (Test-Path -Path $monitoredListeningPortsFilePath) {	
+
+	   $monitoredListeningPorts = Import-Csv -Path $monitoredListeningPortsFilePath
+		
+		foreach ($listenPort in $monitoredListeningPorts) {
+			
+			$localIP    = ''
+			$localPort  = ''
+			$ipProtocol = ''
+			$procName   = '' 
+			$comment    = ''
+			
+			$localIP    = $listenPort.localIP
+			$localPort  = $listenPort.localPort
+			$ipProtocol = ($listenPort.ipProtocol).ToUpper()
+			$procName   = $listenPort.procName
+			$comment    = $listenPort.comment
+
+			if ($localPort -and $ipProtocol -and $procName) {
+
+				if ([string]::IsNullOrEmpty($localIP)) {
+					$localIP = '-'
+				}
+
+				if ([string]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}				
+
+				$displayName = 'listeningPort On  ' + $localComputerName + ':' + $localPort + ' For ' + $procName + ' ' + $ipProtocol
+				$Key         = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
+
+				$instance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']$")	
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ComputerName$",$localComputerName)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/Key$",$Key)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localIP$",$localIP)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localPort$",$localPort)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ipProtocol$",$ipProtocol)																		
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/comment$",$comment)
+				$instance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/procName$",$procName)										
+				$instance.AddProperty("$MPElement[Name='System!System.Entity']/DisplayName$", $displayName)
+				$discoveryData.AddInstance($instance)
+
+			}
+
+		} #END foreach($listenPort in $monitoredListeningPorts)
+		
+	} #END if (Test-Path -Path $monitoredListeningPortsFilePath)		
+
+} else {
+
+	$foo = 'Invalid discovery paramater'
+
+}
+
+$discoveryData]]></ScriptBody>
+          <Parameters>
+            <Parameter>
+              <Name>sourceId</Name>
+              <Value>$MPElement$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>managedEntityId</Name>
+              <Value>$Target/Id$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>discoveryItem</Name>
+              <Value>tcpConnection</Value>
+            </Parameter>
+            <Parameter>
+              <Name>filePath</Name>
+              <Value>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.Computer"]/FilePath$</Value>
+            </Parameter>
+          </Parameters>
+          <TimeoutSeconds>240</TimeoutSeconds>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsTcpConnections" Target="Network.Windows.Computer.NetstatWatcher.Computer" Enabled="true" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryRelationship TypeID="SC!Microsoft.SystemCenter.HealthServiceShouldManageEntity" />
+          <DiscoveryRelationship TypeID="Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection" />
+        </DiscoveryTypes>
+        <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
+          <IntervalSeconds>3600</IntervalSeconds>
+          <SyncTime />
+          <ScriptName>DiscoverNetstatWatcherItemRelations.ps1</ScriptName>
+          <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$discoveryItem,$filePath,$ComputerName)
+
+
+$api                   = New-Object -ComObject 'MOM.ScriptAPI'
+$discoveryData         = $api.CreateDiscoveryData(0, $sourceId, $managedEntityId)
+
+$Global:Error.Clear()
+$script:ErrorView      = 'NormalView'
+$ErrorActionPreference = 'Continue'
+
+$localComputerName     = $env:COMPUTERNAME
+$localComputerDomain   = ([System.DirectoryServices.ActiveDirectory.Domain]::GetComputerDomain()).Name
+$localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)) | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString	| Select-Object -First 1
+
+
+if($discoveryItem -eq 'tcpConnection') {
+
+	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {						     		 		
+		
+		$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+		$monitoredTcpConnects         = Import-Csv -Path $monitoredTcpConnectsFilePath
+
+		$srcInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']$")		
+		$srcInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)	
+		$srcInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']/FilePath$", $filePath)		
+		$discoveryData.AddInstance($srcInstance)
+		
+		$healthInstance = $discoveryData.CreateClassInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthService']$")		
+		$healthInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)			
+		$discoveryData.AddInstance($healthInstance)
+
+
+		foreach($tcpConnect in $monitoredTcpConnects) {
+
+			$remoteIP       = ''
+			$remoteName     = ''
+			$remotePort     = ''
+			$comment        = ''
+			$procName       = ''
+			$connectDetails = ''
+
+			$remoteIP       = $tcpConnect.remoteIP
+			$remoteName     = $tcpConnect.remoteName
+			$remotePort     = $tcpConnect.remotePort
+			$comment        = $tcpConnect.comment
+			$procName       = $tcpConnect.procName
+			
+
+			if ($remoteName -and (-not $remoteIP)) {
+				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
+			}
+			
+			if ($remotePort -and $remoteIP -and $procName) {
+					
+				if ([String]::IsNullOrEmpty($remoteName)) {
+					$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName          
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}				
+
+				if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+					$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+					if ($tmpName -ne $remoteIP) {
+						$tmpName    = $tmpName -replace $localComputerDomain,''
+						$tmpName    = $tmpName -replace '\.',''
+						$remoteName = $tmpName
+					} else {
+						$remoteName = 'No reverse record in DNS.'
+					}
+				}
+
+				if ([String]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}
+
+				$displayName = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+				$Key         = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+				$targetInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']$")	
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/ComputerName$",$localComputerName)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/Key$",$Key)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localIP$",$localIPAddresses)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/localName$",$localComputerName)					
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteIP$",$remoteIP)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remoteName$",$remoteName)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/remotePort$",$remotePort)				
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/comment$",$comment)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.TcpConnection']/procName$",$procName)																					
+				$discoveryData.AddInstance($targetInstance)
+								
+				$relHealthInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthServiceShouldManageEntity']$")
+				$relHealthInstance.Source = $healthInstance
+				$relHealthInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relHealthInstance)
+					
+				$relInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection']$")
+				$relInstance.Source = $srcInstance
+				$relInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relInstance)					
+										
+			} else {
+
+				$foo = 'No details this time, not sending to inventory.'
+
+			} # END	if ($remotePort -and $remoteIP -and $procName)
+		
+		} #END foreach($tcpConnect in $monitoredTcpConnects)		
+
+	} else {
+
+		$foo = 'Invalid data'
+
+	}
+
+} elseif ($discoveryItem -eq 'listeningPort') {
+
+	$monitoredListeningPortsFilePath = $filePath + '\' + 'monitoredListeningPorts.csv'
+	
+   if (Test-Path -Path $monitoredListeningPortsFilePath) {	
+
+		$monitoredListeningPorts = Import-Csv -Path $monitoredListeningPortsFilePath
+
+		$srcInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']$")		
+		$srcInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)	
+		$srcInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.Computer']/FilePath$", $filePath)		
+		$discoveryData.AddInstance($srcInstance)
+		
+		$healthInstance = $discoveryData.CreateClassInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthService']$")		
+		$healthInstance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)			
+		$discoveryData.AddInstance($healthInstance)		
+
+		foreach($listenPort in $monitoredListeningPorts) {
+			
+			$localIP    = ''
+			$localPort  = ''
+			$ipProtocol = ''
+			$procName   = '' 
+			$comment    = ''
+			
+			$localIP    = $listenPort.localIP
+			$localPort  = $listenPort.localPort
+			$ipProtocol = ($listenPort.ipProtocol).ToUpper()
+			$procName   = $listenPort.procName
+			$comment    = $listenPort.comment
+
+			if ($localPort -and $ipProtocol -and $procName) {
+
+				if ([string]::IsNullOrEmpty($localIP)) {
+					$localIP = '-'
+				}
+
+				if ([string]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}				
+
+				$displayName = 'listeningPort On  ' + $localComputerName + ':' + $localPort + ' For ' + $procName + ' ' + $ipProtocol
+				$Key         = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
+				
+				$targetInstance = $discoveryData.CreateClassInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']$")	
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ComputerName$",$localComputerName)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/Key$",$Key)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localIP$",$localIP)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/localPort$",$localPort)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/ipProtocol$",$ipProtocol)																		
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/comment$",$comment)
+				$targetInstance.AddProperty("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ListeningPort']/procName$",$procName)										
+				$targetInstance.AddProperty("$MPElement[Name='System!System.Entity']/DisplayName$", $displayName)
+				$discoveryData.AddInstance($targetInstance)
+								
+				$relHealthInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='SC!Microsoft.SystemCenter.HealthServiceShouldManageEntity']$")
+				$relHealthInstance.Source = $healthInstance
+				$relHealthInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relHealthInstance)
+					
+				$relInstance        = $discoveryData.CreateRelationShipInstance("$MPElement[Name='Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort']$")
+				$relInstance.Source = $srcInstance
+				$relInstance.Target = $targetInstance									
+				$discoveryData.AddInstance($relInstance)
+
+			}
+
+		} #END foreach($listenPort in $monitoredListeningPorts)
+		
+	} #END if (Test-Path -Path $monitoredListeningPortsFilePath)		
+
+} else {
+
+	$foo = 'Invalid discovery paramater'
+
+}
+
+
+$discoveryData]]></ScriptBody>
+          <Parameters>
+            <Parameter>
+              <Name>sourceId</Name>
+              <Value>$MPElement$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>managedEntityId</Name>
+              <Value>$Target/Id$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>discoveryItem</Name>
+              <Value>tcpConnection</Value>
+            </Parameter>
+            <Parameter>
+              <Name>filePath</Name>
+              <Value>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.Computer"]/FilePath$</Value>
+            </Parameter>
+            <Parameter>
+              <Name>ComputerName</Name>
+              <Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value>
+            </Parameter>
+          </Parameters>
+          <TimeoutSeconds>300</TimeoutSeconds>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+    <Monitors>
+      <UnitMonitor ID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" Accessibility="Internal" Enabled="true" Target="Network.Windows.Computer.NetstatWatcher.ListeningPort" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" ConfirmDelivery="false">
+        <Category>AvailabilityHealth</Category>
+        <AlertSettings AlertMessage="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>MatchMonitorHealth</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Data/Context/Property[@Name='TestedAt']$</AlertParameter1>
+            <AlertParameter2>$Data/Context/Property[@Name='State']$</AlertParameter2>
+            <AlertParameter3>$Data/Context/Property[@Name='Supplement']$</AlertParameter3>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="UnderThreshold" MonitorTypeStateID="UnderThreshold" HealthState="Success" />
+          <OperationalState ID="OverWarningThreshold" MonitorTypeStateID="OverWarningThreshold" HealthState="Warning" />
+          <OperationalState ID="OverErrorThreshold" MonitorTypeStateID="OverErrorThreshold" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <IntervalSeconds>300</IntervalSeconds>
+          <SyncTime />
+          <MonitorItem>listeningPort</MonitorItem>
+          <Key>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.ListeningPort"]/Key$</Key>
+          <Threshold />
+        </Configuration>
+      </UnitMonitor>
+      <UnitMonitor ID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer" Accessibility="Internal" Enabled="true" Target="Network.Windows.Computer.NetstatWatcher.Computer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.WmiBased.Performance.ConsecutiveSamplesThreshold" ConfirmDelivery="false">
+        <Category>AvailabilityHealth</Category>
+        <AlertSettings AlertMessage="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>MatchMonitorHealth</AlertSeverity>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="ConditionTrue" MonitorTypeStateID="ConditionTrue" HealthState="Error" />
+          <OperationalState ID="ConditionFalse" MonitorTypeStateID="ConditionFalse" HealthState="Success" />
+        </OperationalStates>
+        <Configuration>
+          <NameSpace>root\cimv2</NameSpace>
+          <Query>SELECT * FROM Win32_PingStatus WHERE Address='$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.Computer"]/NodeName$'</Query>
+          <Frequency>300</Frequency>
+          <ObjectName>tcpPingCheck</ObjectName>
+          <CounterName>PingCheckResponse</CounterName>
+          <InstanceName />
+          <Value>$Data/Property[@Name='StatusCode']$</Value>
+          <Threshold>0</Threshold>
+          <Direction>greater</Direction>
+          <NumSamples>4</NumSamples>
+        </Configuration>
+      </UnitMonitor>
+      <UnitMonitor ID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection" Accessibility="Internal" Enabled="true" Target="Network.Windows.Computer.NetstatWatcher.TcpConnection" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" ConfirmDelivery="false">
+        <Category>AvailabilityHealth</Category>
+        <AlertSettings AlertMessage="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection.AlertMessage">
+          <AlertOnState>Error</AlertOnState>
+          <AutoResolve>true</AutoResolve>
+          <AlertPriority>Normal</AlertPriority>
+          <AlertSeverity>MatchMonitorHealth</AlertSeverity>
+          <AlertParameters>
+            <AlertParameter1>$Data/Context/Property[@Name='TestedAt']$</AlertParameter1>
+            <AlertParameter2>$Data/Context/Property[@Name='State']$</AlertParameter2>
+            <AlertParameter3>$Data/Context/Property[@Name='Supplement']$</AlertParameter3>
+          </AlertParameters>
+        </AlertSettings>
+        <OperationalStates>
+          <OperationalState ID="UnderThreshold" MonitorTypeStateID="UnderThreshold" HealthState="Success" />
+          <OperationalState ID="OverWarningThreshold" MonitorTypeStateID="OverWarningThreshold" HealthState="Warning" />
+          <OperationalState ID="OverErrorThreshold" MonitorTypeStateID="OverErrorThreshold" HealthState="Error" />
+        </OperationalStates>
+        <Configuration>
+          <IntervalSeconds>240</IntervalSeconds>
+          <SyncTime />
+          <MonitorItem>tcpConnection</MonitorItem>
+          <Key>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.TcpConnection"]/Key$</Key>
+          <Threshold />
+        </Configuration>
+      </UnitMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation>
+    <Views>
+      <View ID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.Computer" Accessibility="Internal" Target="Network.Windows.Computer.NetstatWatcher.Computer" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+        <Presentation>
+          <ColumnInfo Index="0" Grouped="false" IsSortable="true" Sorted="true" SortIndex="-1" Visible="true" SortOrder="Descending" Width="120">
+            <Name>State</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.Computer</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="1" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="180">
+            <Name>NodeName</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.Computer/NodeName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="2" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="400">
+            <Name>FilePath</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.Computer/FilePath</Id>
+          </ColumnInfo>
+        </Presentation>
+      </View>
+      <View ID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.TcpConnection" Accessibility="Internal" Target="Network.Windows.Computer.NetstatWatcher.TcpConnection" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+        <Presentation>
+          <ColumnInfo Index="0" Grouped="false" IsSortable="true" Sorted="true" SortIndex="-1" Visible="true" SortOrder="Descending" Width="120">
+            <Name>State</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="1" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120">
+            <Name>ComputerName</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection/ComputerName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="2" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40">
+            <Name>localIP</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection/localIP</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="3" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40">
+            <Name>remoteIP</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection/remoteIP</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="4" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120">
+            <Name>remoteName</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection/remoteName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="5" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="20">
+            <Name>remotePort</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection/remotePort</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="6" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120">
+            <Name>procName</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection/procName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="7" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="340">
+            <Name>comment</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.TcpConnection/comment</Id>
+          </ColumnInfo>
+        </Presentation>
+      </View>
+      <View ID="Network.Windows.Computer.NetstatWatcher.View.Alerts.Netstat.Computer" Accessibility="Internal" Target="Network.Windows.Computer.NetstatWatcher.Computer" TypeID="SC!Microsoft.SystemCenter.AlertViewType" Visible="true">
+        <Category>Operations</Category>
+        <Criteria>
+          <ResolutionState>
+            <StateRange Operator="NotEquals">255</StateRange>
+          </ResolutionState>
+        </Criteria>
+      </View>
+      <View ID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.listeningPort" Accessibility="Internal" Target="Network.Windows.Computer.NetstatWatcher.ListeningPort" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true">
+        <Category>Operations</Category>
+        <Presentation>
+          <ColumnInfo Index="0" Grouped="false" IsSortable="true" Sorted="true" SortIndex="-1" Visible="true" SortOrder="Descending" Width="120">
+            <Name>State</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.ListeningPort</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="1" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="160">
+            <Name>ComputerName</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.ListeningPort/ComputerName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="2" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40">
+            <Name>localIP</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.ListeningPort/localIP</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="3" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40">
+            <Name>localPort</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.ListeningPort/localPort</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="4" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="40">
+            <Name>ipProtocol</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.ListeningPort/ipProtocol</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="5" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="120">
+            <Name>procName</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.ListeningPort/procName</Id>
+          </ColumnInfo>
+          <ColumnInfo Index="6" Grouped="false" IsSortable="true" Sorted="false" SortIndex="-1" Visible="true" SortOrder="Ascending" Width="340">
+            <Name>comment</Name>
+            <Id>Network.Windows.Computer.NetstatWatcher.ListeningPort/comment</Id>
+          </ColumnInfo>
+        </Presentation>
+      </View>
+    </Views>
+    <Folders>
+      <Folder ID="Network.Windows.Computer.NetstatWatcher.Folders" Accessibility="Internal" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
+    </Folders>
+    <FolderItems>
+      <FolderItem ElementID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.Computer" Folder="Network.Windows.Computer.NetstatWatcher.Folders" ID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.Computer.FolderItem" />
+      <FolderItem ElementID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.TcpConnection" Folder="Network.Windows.Computer.NetstatWatcher.Folders" ID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.TcpConnection.FolderItem" />
+      <FolderItem ElementID="Network.Windows.Computer.NetstatWatcher.View.Alerts.Netstat.Computer" Folder="Network.Windows.Computer.NetstatWatcher.Folders" ID="Network.Windows.Computer.NetstatWatcher.View.Alerts.Netstat.Computer.FolderItem" />
+      <FolderItem ElementID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.listeningPort" Folder="Network.Windows.Computer.NetstatWatcher.Folders" ID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.listeningPort.FolderItem" />
+    </FolderItems>
+    <ImageReferences>
+      <ImageReference ElementID="Network.Windows.Computer.NetstatWatcher.Computer" ImageID="Network.Windows.Computer.NetstatWatcher.Computer.Icon" />
+      <ImageReference ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" ImageID="Network.Windows.Computer.NetstatWatcher.TcpConnection.Icon" />
+      <ImageReference ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" ImageID="Network.Windows.Computer.NetstatWatcher.ListeningPort.Icon" />
+    </ImageReferences>
+    <StringResources>
+      <StringResource ID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort.AlertMessage" />
+      <StringResource ID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer.AlertMessage" />
+      <StringResource ID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection.AlertMessage" />
+    </StringResources>
+  </Presentation>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort">
+          <Name>Monitor listeningPort</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort.AlertMessage">
+          <Name>netwatcher - ListeningPort Error</Name>
+          <Description>Please check. ListeningPort is down.
+
+
+TestedAt: {0}
+Last check Result: {1}
+
+
+Supplement: {2}</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="UnderThreshold">
+          <Name>UnderThreshold</Name>
+          <Description>UnderThreshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="OverWarningThreshold">
+          <Name>OverWarningThreshold</Name>
+          <Description>OverWarningThreshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="OverErrorThreshold">
+          <Name>OverErrorThreshold</Name>
+          <Description>OverErrorThreshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer">
+          <Name>Monitor netstatWatcher Computer</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer.AlertMessage">
+          <Name>netstatWatcher Computer - Not reachable</Name>
+          <Description>netstatWatcher Computer not reachable via PING</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer" SubElementID="ConditionTrue">
+          <Name>ConditionTrue</Name>
+          <Description>ConditionTrue</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer" SubElementID="ConditionFalse">
+          <Name>ConditionFalse</Name>
+          <Description>ConditionFalse</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection">
+          <Name>Monitor tcpConnection</Name>
+          <Description>Description for the new unit monitor.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection.AlertMessage">
+          <Name>netwatcher - tcpConnection Error</Name>
+          <Description>Please check. tcpConnection is down.
+
+
+TestedAt: {0}
+Last check Result: {1}
+
+
+Supplement: {2}</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection" SubElementID="UnderThreshold">
+          <Name>UnderThreshold</Name>
+          <Description>UnderThreshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection" SubElementID="OverWarningThreshold">
+          <Name>OverWarningThreshold</Name>
+          <Description>OverWarningThreshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection" SubElementID="OverErrorThreshold">
+          <Name>OverErrorThreshold</Name>
+          <Description>OverErrorThreshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered">
+          <Name>NetstatWatcher 3 State Monitor</Name>
+          <Description>NetstatWatcher 3 State Monitor</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="IntervalSeconds">
+          <Name>Interval Seconds</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="SyncTime">
+          <Name>Sync Time</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="Threshold">
+          <Name>Threshold</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag">
+          <Name>Monitor PropertyBag</Name>
+          <Description>Monitor Property Bag</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="IntervalSeconds">
+          <Name>Intervarl Seconds</Name>
+          <Description>Intervarl Seconds</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="SyncTime">
+          <Name>Sync Time</Name>
+          <Description>Sync Time</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="Threshold">
+          <Name>Threshold</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
+          <Name>NetstatWatcher Monitor Probe</Name>
+          <Description>NetstatWatcher Monitor Probe</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType">
+          <Name>NetstatWatcher 3 State Monitor Type</Name>
+          <Description>NetstatWatcher 3 State Monitor Type</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="IntervalSeconds">
+          <Name>Interval Seconds</Name>
+          <Description>Interval Seconds</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="SyncTime">
+          <Name>Sync Time</Name>
+          <Description>Sync Time</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="Threshold">
+          <Name>Threshold</Name>
+          <Description>Threshold</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Folders">
+          <Name>Network Windows Computer NetstatWatcher</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.Computer">
+          <Name>NetstatWatcher Computers</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.TcpConnection">
+          <Name>NetstatWatcher tcpConnections</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.View.Alerts.Netstat.Computer">
+          <Name>NetstatWatcher Alerts</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.View.State.Netstat.listeningPort">
+          <Name>NetstatWatcher listeningPorts</Name>
+          <Description>Description for the new view</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher">
+          <Name>Network Windows Computer NetstatWatcher</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer">
+          <Name>Network Windows Computer NetstatWatcher Server</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer" SubElementID="FilePath">
+          <Name>FilePath</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer" SubElementID="NodeName">
+          <Name>NodeName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection">
+          <Name>Network Windows Server NetstatWatcher TcpConnection</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="ComputerName">
+          <Name>ComputerName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="Key">
+          <Name>Key</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="localIP">
+          <Name>localIP</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="localName">
+          <Name>localName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="procName">
+          <Name>procName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remoteIP">
+          <Name>remoteIP</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remoteName">
+          <Name>remoteName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remotePort">
+          <Name>remotePort</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="comment">
+          <Name>comment</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort">
+          <Name>Network Windows Computer NetstatWatcher ListeningPort</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="comment">
+          <Name>comment</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="ComputerName">
+          <Name>ComputerName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="ipProtocol">
+          <Name>ipProtocol</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="Key">
+          <Name>Key</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="localIP">
+          <Name>localIP</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="localPort">
+          <Name>localPort</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="procName">
+          <Name>procName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection">
+          <Name>NetstatWatcher ComputerHostsTcpConnection</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort">
+          <Name>NetstatWatcher ComputerHostsListeningPort</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.Computer">
+          <Name>Discovery NestatInfo Computer</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsListeningPort">
+          <Name>Discovery NetstatWatcher Computer Hosts  listeningPort</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.listeningPorts">
+          <Name>Discovery.NetstatWatcher.listeningPorts</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.tcpConnections">
+          <Name>Discovery.NetstatWatcher.tcpConnections</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsTcpConnections">
+          <Name>Discovery NetstatWatcher Computer Hosts  tcpConnection</Name>
+          <Description>Description for the new discovery.</Description>
+        </DisplayString>
+      </DisplayStrings>
+      <KnowledgeArticles></KnowledgeArticles>
+    </LanguagePack>
+  </LanguagePacks>
+  <Resources>
+    <Image ID="Network.Windows.Computer.NetstatWatcher.Computer.Icon" FileName="netstatWatcherComputerT.png" Accessibility="Public" HasNullStream="false" Comment="netstatWatcher Computer" />
+    <Image ID="Network.Windows.Computer.NetstatWatcher.TcpConnection.Icon" FileName="netstatWatcherConnectionT.png" Accessibility="Public" HasNullStream="false" Comment="netstatWatcher Connection" />
+    <Image ID="Network.Windows.Computer.NetstatWatcher.ListeningPort.Icon" FileName="netstatWatcherPortT.png" Accessibility="Public" HasNullStream="false" Comment="netstatWatcher Port" />
+  </Resources>
+</ManagementPack>

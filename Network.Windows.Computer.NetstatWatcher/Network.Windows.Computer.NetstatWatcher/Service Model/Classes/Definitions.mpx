@@ -1,0 +1,161 @@
+﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.Computer" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.ComputerRole" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="FilePath" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="NodeName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.TcpConnection" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="ComputerName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="Key" Type="string" AutoIncrement="false" Key="true" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remoteIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remoteName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="remotePort" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="procName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="512" MinLength="0" Required="false" Scale="0" />
+          <Property ID="comment" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+
+        <ClassType ID="Network.Windows.Computer.NetstatWatcher.ListeningPort" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="ComputerName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="Key" Type="string" AutoIncrement="false" Key="true" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localIP" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="localPort" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="ipProtocol" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" Scale="0" />
+          <Property ID="procName" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="512" MinLength="0" Required="false" Scale="0" />
+          <Property ID="comment" Type="string" AutoIncrement="false" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" Scale="0" />
+        </ClassType>
+
+      </ClassTypes>
+
+      <RelationshipTypes>
+
+        <RelationshipType ID="Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Source" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.Computer" />
+          <Target ID="Target" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.TcpConnection" />
+        </RelationshipType>
+
+        <RelationshipType ID="Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Source" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.Computer" />
+          <Target ID="Target" MinCardinality="0" MaxCardinality="2147483647" Type="Network.Windows.Computer.NetstatWatcher.ListeningPort" />
+        </RelationshipType>
+
+      </RelationshipTypes>
+
+    </EntityTypes>
+  </TypeDefinitions>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer">
+          <Name>Network Windows Computer NetstatWatcher Server</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer" SubElementID="FilePath">
+          <Name>FilePath</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Computer" SubElementID="NodeName">
+          <Name>NodeName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection">
+          <Name>Network Windows Server NetstatWatcher TcpConnection</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="ComputerName">
+          <Name>ComputerName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="Key">
+          <Name>Key</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="localIP">
+          <Name>localIP</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="localName">
+          <Name>localName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="procName">
+          <Name>procName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remoteIP">
+          <Name>remoteIP</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remoteName">
+          <Name>remoteName</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="remotePort">
+          <Name>remotePort</Name>
+          <Description></Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.TcpConnection" SubElementID="comment">
+          <Name>comment</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort">
+          <Name>Network Windows Computer NetstatWatcher ListeningPort</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="comment">
+          <Name>comment</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="ComputerName">
+          <Name>ComputerName</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="ipProtocol">
+          <Name>ipProtocol</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="Key">
+          <Name>Key</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="localIP">
+          <Name>localIP</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="localPort">
+          <Name>localPort</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ListeningPort" SubElementID="procName">
+          <Name>procName</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection">
+          <Name>NetstatWatcher ComputerHostsTcpConnection</Name>
+          <Description></Description>
+        </DisplayString>
+
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort">
+          <Name>NetstatWatcher ComputerHostsListeningPort</Name>
+          <Description></Description>
+        </DisplayString>
+
+      </DisplayStrings>    
+
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPackFragment>

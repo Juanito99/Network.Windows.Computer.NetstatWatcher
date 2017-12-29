@@ -1,0 +1,28 @@
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.Server*6*10*ClassType
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*10*10*ClassType
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Server.NetstatInfo.Discovery.NetstatInfo.Server*6*8*Discovery
+Presentation\Views.mptg.mpx*Network.Windows.Server.NetstatInfo.View.State.Server*6*8*View
+Presentation\Folders.mpx*Network.Windows.Server.NetstatInfo.Folders*5*8*Folder
+Presentation\Folders.mpx*Network.Windows.Server.NetstatInfo.Folders.State*7*8*Folder
+Presentation\Folders.mpx*Network.Windows.Server.NetstatInfo.Folders.Alerts*9*8*Folder
+Presentation\Views.mptg.mpx*Network.Windows.Server.NetstatInfo.View.State.Server.FolderItem*11*8*FolderItem
+Presentation\Folders.mpx*Network.Windows.Server.NetstatInfo.Folders*20*10*DisplayString
+Presentation\Folders.mpx*Network.Windows.Server.NetstatInfo.Folders.State*25*10*DisplayString
+Presentation\Folders.mpx*Network.Windows.Server.NetstatInfo.Folders.Alerts*30*10*DisplayString
+Presentation\Views.mptg.mpx*Network.Windows.Server.NetstatInfo.View.State.Server*17*10*DisplayString
+Project.mpx*Network.Windows.Server.NetstatInfo*5*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.Server*35*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.Server*40*10*DisplayString*SubElementID*FilePath
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*45*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*50*10*DisplayString*SubElementID*ComputerName
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*55*10*DisplayString*SubElementID*Key
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*60*10*DisplayString*SubElementID*localIP
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*65*10*DisplayString*SubElementID*localName
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*70*10*DisplayString*SubElementID*localPort
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*75*10*DisplayString*SubElementID*procName
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*80*10*DisplayString*SubElementID*procPath
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*85*10*DisplayString*SubElementID*procStartTime
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*90*10*DisplayString*SubElementID*remoteIP
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*95*10*DisplayString*SubElementID*remoteName
+Service Model\Classes\Definitions.mpx*Network.Windows.Server.NetstatInfo.TcpConnection*100*10*DisplayString*SubElementID*remotePort
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Server.NetstatInfo.Discovery.NetstatInfo.Server*63*10*DisplayString

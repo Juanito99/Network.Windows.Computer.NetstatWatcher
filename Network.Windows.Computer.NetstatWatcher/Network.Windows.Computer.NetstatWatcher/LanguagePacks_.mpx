@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered">
+          <Name>NetstatWatcher 3 State Monitor</Name>
+          <Description>NetstatWatcher 3 State Monitor</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="IntervalSeconds">
+          <Name>Interval Seconds</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="SyncTime">
+          <Name>Sync Time</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="Threshold">
+          <Name>Threshold</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag">
+          <Name>Monitor PropertyBag</Name>
+          <Description>Monitor Property Bag</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="IntervalSeconds">
+          <Name>Intervarl Seconds</Name>
+          <Description>Intervarl Seconds</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="SyncTime">
+          <Name>Sync Time</Name>
+          <Description>Sync Time</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="Threshold">
+          <Name>Threshold</Name>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
+          <Name>NetstatWatcher Monitor Probe</Name>
+          <Description>NetstatWatcher Monitor Probe</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType">
+          <Name>NetstatWatcher 3 State Monitor Type</Name>
+          <Description>NetstatWatcher 3 State Monitor Type</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="IntervalSeconds">
+          <Name>Interval Seconds</Name>
+          <Description>Interval Seconds</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="SyncTime">
+          <Name>Sync Time</Name>
+          <Description>Sync Time</Description>
+        </DisplayString>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="Threshold">
+          <Name>Threshold</Name>
+          <Description>Threshold</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks></ManagementPackFragment>

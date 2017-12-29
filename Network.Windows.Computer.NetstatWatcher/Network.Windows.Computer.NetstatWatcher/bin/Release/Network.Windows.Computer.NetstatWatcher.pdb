@@ -1,0 +1,99 @@
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.Computer*6*10*ClassType
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*11*10*ClassType
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*23*10*ClassType
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection*37*10*RelationshipType
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort*42*10*RelationshipType
+Health Model\Modules.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered*6*8*DataSourceModuleType
+Health Model\Modules.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag*55*8*DataSourceModuleType
+Health Model\Modules.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Probe*92*8*ProbeActionModuleType
+Health Model\Modules.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType*130*8*UnitMonitorType
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.Computer.Category*3*6*Category
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection.Category*4*6*Category
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort.Category*5*6*Category
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.Computer*6*8*Discovery
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsListeningPort*62*8*Discovery
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.listeningPorts*98*8*Discovery
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.tcpConnections*129*8*Discovery
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsTcpConnections*160*8*Discovery
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort*6*8*UnitMonitor
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer*32*8*UnitMonitor
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection*57*8*UnitMonitor
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.Computer*6*8*View
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.TcpConnection*23*8*View
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.Alerts.Netstat.Computer*60*8*View
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.listeningPort*68*8*View
+Presentation\Folders.mpx*Network.Windows.Computer.NetstatWatcher.Folders*4*8*Folder
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.Computer.FolderItem*103*8*FolderItem
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.TcpConnection.FolderItem*104*8*FolderItem
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.Alerts.Netstat.Computer.FolderItem*105*8*FolderItem
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.listeningPort.FolderItem*106*8*FolderItem
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.Computer*9*8*ImageReference
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*10*8*ImageReference
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*11*8*ImageReference
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort.AlertMessage*87*8*StringResource
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer.AlertMessage*88*8*StringResource
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection.AlertMessage*89*8*StringResource
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort*95*10*DisplayString
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort.AlertMessage*99*10*DisplayString
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort*110*10*DisplayString*SubElementID*UnderThreshold
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort*114*10*DisplayString*SubElementID*OverWarningThreshold
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort*118*10*DisplayString*SubElementID*OverErrorThreshold
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer*122*10*DisplayString
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer.AlertMessage*126*10*DisplayString
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer*130*10*DisplayString*SubElementID*ConditionTrue
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer*134*10*DisplayString*SubElementID*ConditionFalse
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection*138*10*DisplayString
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection.AlertMessage*142*10*DisplayString
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection*153*10*DisplayString*SubElementID*UnderThreshold
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection*157*10*DisplayString*SubElementID*OverWarningThreshold
+Health Model\Monitors.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection*161*10*DisplayString*SubElementID*OverErrorThreshold
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered*5*10*DisplayString
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered*9*10*DisplayString*SubElementID*IntervalSeconds
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered*12*10*DisplayString*SubElementID*SyncTime
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered*15*10*DisplayString*SubElementID*Threshold
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag*18*10*DisplayString
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag*22*10*DisplayString*SubElementID*IntervalSeconds
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag*26*10*DisplayString*SubElementID*SyncTime
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag*30*10*DisplayString*SubElementID*Threshold
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Probe*33*10*DisplayString
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType*37*10*DisplayString
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType*41*10*DisplayString*SubElementID*IntervalSeconds
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType*45*10*DisplayString*SubElementID*SyncTime
+LanguagePacks_.mpx*Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType*49*10*DisplayString*SubElementID*Threshold
+Presentation\Folders.mpx*Network.Windows.Computer.NetstatWatcher.Folders*12*10*DisplayString
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.Computer*112*10*DisplayString
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.TcpConnection*116*10*DisplayString
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.Alerts.Netstat.Computer*120*10*DisplayString
+Presentation\Views.mptg.mpx*Network.Windows.Computer.NetstatWatcher.View.State.Netstat.listeningPort*124*10*DisplayString
+Project.mpx*Network.Windows.Computer.NetstatWatcher*5*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.Computer*54*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.Computer*58*10*DisplayString*SubElementID*FilePath
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.Computer*62*10*DisplayString*SubElementID*NodeName
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*66*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*70*10*DisplayString*SubElementID*ComputerName
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*74*10*DisplayString*SubElementID*Key
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*78*10*DisplayString*SubElementID*localIP
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*82*10*DisplayString*SubElementID*localName
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*86*10*DisplayString*SubElementID*procName
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*90*10*DisplayString*SubElementID*remoteIP
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*94*10*DisplayString*SubElementID*remoteName
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*98*10*DisplayString*SubElementID*remotePort
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection*102*10*DisplayString*SubElementID*comment
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*107*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*112*10*DisplayString*SubElementID*comment
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*117*10*DisplayString*SubElementID*ComputerName
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*122*10*DisplayString*SubElementID*ipProtocol
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*127*10*DisplayString*SubElementID*Key
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*132*10*DisplayString*SubElementID*localIP
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*137*10*DisplayString*SubElementID*localPort
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort*142*10*DisplayString*SubElementID*procName
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ComputerHostsTcpConnection*147*10*DisplayString
+Service Model\Classes\Definitions.mpx*Network.Windows.Computer.NetstatWatcher.ComputerHostsListeningPort*152*10*DisplayString
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.Computer*201*10*DisplayString
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsListeningPort*205*10*DisplayString
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.listeningPorts*209*10*DisplayString
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.tcpConnections*213*10*DisplayString
+Service Model\Discoveries\Discoveries.mptg.mpx*Network.Windows.Computer.NetstatWatcher.Discovery.NetstatWatcher.ComputerHostsTcpConnections*217*10*DisplayString
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.Computer.Icon*15*6*Image
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.TcpConnection.Icon*16*6*Image
+Presentation\Icons.mpx*Network.Windows.Computer.NetstatWatcher.ListeningPort.Icon*17*6*Image
