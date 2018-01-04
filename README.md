@@ -38,6 +38,11 @@ This management pack which uses netstat and powershell can help.
 
 
 
+### Community Management Pack:
+Keep this and many other management packs automatically up to date by installing the [Community Management Pack](https://squaredup.com/landing-pages/the-scom-community-mp-catalog)
+
+
+
 
 ### License Terms
 
