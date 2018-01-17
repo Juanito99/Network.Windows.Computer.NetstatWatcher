@@ -14,10 +14,10 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\</OutputPath>
-    <GenerateSealed>false</GenerateSealed>
+    <GenerateSealed>False</GenerateSealed>
     <Company>MyCompany</Company>
     <Copyright>Copyright (c) MyCompany. All rights reserved.</Copyright>
-    <DelaySigning>false</DelaySigning>
+    <DelaySigning>False</DelaySigning>
     <AssemblyOriginatorKeyFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -59,9 +59,6 @@
     <Compile Include="Health Model\Monitors.mptg.mpx">
       <SubType>Code</SubType>
       <DependentUpon>Health Model\Monitors.mptg</DependentUpon>
-    </Compile>
-    <Compile Include="LanguagePacks_.mpx">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Presentation\Folders.mpx">
       <SubType>Code</SubType>

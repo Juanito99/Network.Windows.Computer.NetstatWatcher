@@ -1,26 +1,20 @@
 <TemplateGroup>
   <Instances>
     <Instance ID="Instance1cb8bbbf42bb4bd8ba0ce5a2d4aaa2da" Type="Microsoft.SystemCenter.Authoring.CodeGeneration.Monitoring.UnitMonitor" Version="1.0.0.0">
-      <UnitMonitorConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <MonitorType>Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType</MonitorType>
-        <MonitorConfig>&lt;IntervalSeconds&gt;300&lt;/IntervalSeconds&gt;&lt;SyncTime /&gt;&lt;MonitorItem&gt;listeningPort&lt;/MonitorItem&gt;&lt;Key&gt;$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.ListeningPort"]/Key$&lt;/Key&gt;&lt;Threshold /&gt;</MonitorConfig>
+      <UnitMonitorConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <MonitorType>Network.Windows.Computer.NetstatWatcher.TwoState.Test.MonitorType</MonitorType>
+        <MonitorConfig>&lt;IntervalSeconds&gt;300&lt;/IntervalSeconds&gt;&lt;SyncTime /&gt;&lt;TimeoutSeconds&gt;120&lt;/TimeoutSeconds&gt;&lt;MonitorItem&gt;listeningPort&lt;/MonitorItem&gt;&lt;Key&gt;$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.ListeningPort"]/Key$&lt;/Key&gt;</MonitorConfig>
         <MonitorOperationalStates>
           <OperationalState>
-            <OperationalStateId>UnderThreshold</OperationalStateId>
-            <OperationalStateDisplayName>UnderThreshold</OperationalStateDisplayName>
-            <MonitorTypeStateId>UnderThreshold</MonitorTypeStateId>
+            <OperationalStateId>Success</OperationalStateId>
+            <OperationalStateDisplayName>Success</OperationalStateDisplayName>
+            <MonitorTypeStateId>Success</MonitorTypeStateId>
             <HealthState>Success</HealthState>
           </OperationalState>
           <OperationalState>
-            <OperationalStateId>OverWarningThreshold</OperationalStateId>
-            <OperationalStateDisplayName>OverWarningThreshold</OperationalStateDisplayName>
-            <MonitorTypeStateId>OverWarningThreshold</MonitorTypeStateId>
-            <HealthState>Warning</HealthState>
-          </OperationalState>
-          <OperationalState>
-            <OperationalStateId>OverErrorThreshold</OperationalStateId>
-            <OperationalStateDisplayName>OverErrorThreshold</OperationalStateDisplayName>
-            <MonitorTypeStateId>OverErrorThreshold</MonitorTypeStateId>
+            <OperationalStateId>Failure</OperationalStateId>
+            <OperationalStateDisplayName>Failure</OperationalStateDisplayName>
+            <MonitorTypeStateId>Failure</MonitorTypeStateId>
             <HealthState>Error</HealthState>
           </OperationalState>
         </MonitorOperationalStates>
@@ -39,7 +33,7 @@
         <AlertPriority>Normal</AlertPriority>
         <AlertSeverity>MatchMonitorHealth</AlertSeverity>
         <AlertName>netwatcher - ListeningPort Error</AlertName>
-        <AlertDescription>Please check. ListeningPort is down.
+        <AlertDescription>Please check. ListeningPort $Data/Context/Property[@Name='Key']$ stopped liseten.
 
 
 TestedAt: $Data/Context/Property[@Name='TestedAt']$
@@ -51,7 +45,7 @@ Supplement: $Data/Context/Property[@Name='Supplement']$</AlertDescription>
       </UnitMonitorConfig>
     </Instance>
     <Instance ID="Instancec0ccdaf93f5243f19c37c86cd55434c1" Type="Microsoft.SystemCenter.Authoring.CodeGeneration.Monitoring.UnitMonitor" Version="1.0.0.0">
-      <UnitMonitorConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <UnitMonitorConfig xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <MonitorType>Windows!Microsoft.Windows.WmiBased.Performance.ConsecutiveSamplesThreshold</MonitorType>
         <MonitorConfig>&lt;NameSpace&gt;root\cimv2&lt;/NameSpace&gt;&lt;Query&gt;SELECT * FROM Win32_PingStatus WHERE Address='$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.Computer"]/NodeName$'&lt;/Query&gt;&lt;Frequency&gt;300&lt;/Frequency&gt;&lt;ObjectName&gt;tcpPingCheck&lt;/ObjectName&gt;&lt;CounterName&gt;PingCheckResponse&lt;/CounterName&gt;&lt;InstanceName /&gt;&lt;Value&gt;$Data/Property[@Name='StatusCode']$&lt;/Value&gt;&lt;Threshold&gt;0&lt;/Threshold&gt;&lt;Direction&gt;greater&lt;/Direction&gt;&lt;NumSamples&gt;4&lt;/NumSamples&gt;</MonitorConfig>
         <MonitorOperationalStates>
@@ -90,7 +84,7 @@ Supplement: $Data/Context/Property[@Name='Supplement']$</AlertDescription>
     <Instance ID="Instance4c61821d754c47d381d88d066e598607" Type="Microsoft.SystemCenter.Authoring.CodeGeneration.Monitoring.UnitMonitor" Version="1.0.0.0">
       <UnitMonitorConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <MonitorType>Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType</MonitorType>
-        <MonitorConfig>&lt;IntervalSeconds&gt;240&lt;/IntervalSeconds&gt;&lt;SyncTime /&gt;&lt;MonitorItem&gt;tcpConnection&lt;/MonitorItem&gt;&lt;Key&gt;$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.TcpConnection"]/Key$&lt;/Key&gt;&lt;Threshold /&gt;</MonitorConfig>
+        <MonitorConfig>&lt;IntervalSeconds&gt;300&lt;/IntervalSeconds&gt;&lt;SyncTime /&gt;&lt;MonitorItem&gt;tcpConnection&lt;/MonitorItem&gt;&lt;Key&gt;$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.TcpConnection"]/Key$&lt;/Key&gt;&lt;MatchCount&gt;3&lt;/MatchCount&gt;&lt;SampleCount&gt;3&lt;/SampleCount&gt;&lt;WithinSeconds&gt;240&lt;/WithinSeconds&gt;&lt;TimeoutSeconds&gt;3600&lt;/TimeoutSeconds&gt;</MonitorConfig>
         <MonitorOperationalStates>
           <OperationalState>
             <OperationalStateId>UnderThreshold</OperationalStateId>
@@ -126,8 +120,7 @@ Supplement: $Data/Context/Property[@Name='Supplement']$</AlertDescription>
         <AlertPriority>Normal</AlertPriority>
         <AlertSeverity>MatchMonitorHealth</AlertSeverity>
         <AlertName>netwatcher - tcpConnection Error</AlertName>
-        <AlertDescription>Please check. tcpConnection is down.
-
+        <AlertDescription>Please check. tcpConnection $Data/Context/Property[@Name='Key']$ is down.
 
 TestedAt: $Data/Context/Property[@Name='TestedAt']$
 Last check Result: $Data/Context/Property[@Name='State']$

@@ -3,7 +3,7 @@
   <Manifest>
     <Identity>
       <ID>Network.Windows.Computer.NetstatWatcher</ID>
-      <Version>1.0.0.182</Version>
+      <Version>1.0.0.302</Version>
     </Identity>
     <Name>Network.Windows.Computer.NetstatWatcher</Name>
     <References>
@@ -75,12 +75,18 @@
           <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <OverrideableParameters>
           <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
           <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
-          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />
+          <OverrideableParameter ID="MatchCount" Selector="$Config/MatchCount$" ParameterType="int" />
+          <OverrideableParameter ID="SampleCount" Selector="$Config/SampleCount$" ParameterType="int" />
+          <OverrideableParameter ID="WithinSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
         </OverrideableParameters>
         <ModuleImplementation Isolation="Any">
           <Composite>
@@ -89,7 +95,56 @@
                 <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
                 <SyncTime>$Config/SyncTime$</SyncTime>
                 <MonitorItem>$Config/MonitorItem$</MonitorItem>
-                <Threshold>$Config/Threshold$</Threshold>
+                <Key>$Config/Key$</Key>
+                <MatchCount>$Config/MatchCount$</MatchCount>
+                <SampleCount>$Config/SampleCount$</SampleCount>
+                <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </DataSource>
+              <ConditionDetection ID="Filter" TypeID="System!System.ExpressionFilter">
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery Type="String">Property[@Name="Key"]</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value Type="String">$Config/Key$</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+              </ConditionDetection>
+            </MemberModules>
+            <Composition>
+              <Node ID="Filter">
+                <Node ID="DS" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag.Filtered" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="DS" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <SyncTime>$Config/SyncTime$</SyncTime>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>
                 <Key>$Config/Key$</Key>
               </DataSource>
               <ConditionDetection ID="Filter" TypeID="System!System.ExpressionFilter">
@@ -120,13 +175,19 @@
           <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <OverrideableParameters>
           <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
           <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
-          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />
+          <OverrideableParameter ID="MatchCount" Selector="$Config/MatchCount$" ParameterType="int" />
+          <OverrideableParameter ID="SampleCount" Selector="$Config/SampleCount$" ParameterType="int" />
+          <OverrideableParameter ID="WithinSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
         </OverrideableParameters>
         <ModuleImplementation Isolation="Any">
           <Composite>
@@ -136,8 +197,46 @@
                 <SyncTime>$Config/SyncTime$</SyncTime>
               </DataSource>
               <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
                 <MonitorItem>$Config/MonitorItem$</MonitorItem>
-                <Threshold>$Config/Threshold$</Threshold>
+                <MatchCount>$Config/MatchCount$</MatchCount>
+                <SampleCount>$Config/SampleCount$</SampleCount>
+                <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe">
+                <Node ID="Schedule" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Schedule" TypeID="System!System.SimpleScheduler">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <SyncTime>$Config/SyncTime$</SyncTime>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Probe">
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
               </ProbeAction>
             </MemberModules>
             <Composition>
@@ -151,15 +250,26 @@
       </DataSourceModuleType>
       <ProbeActionModuleType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe" Accessibility="Internal" Batching="false" PassThrough="false">
         <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <ModuleImplementation Isolation="Any">
           <Composite>
             <MemberModules>
               <ProbeAction ID="PSScript" TypeID="Windows!Microsoft.Windows.PowerShellPropertyBagProbe">
                 <ScriptName>MonitorNetstatWatcherItems.ps1</ScriptName>
-                <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$MonitorItem)
+                <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$MonitorItem,$Threshold,$IntervalSeconds,$MatchCount,$SampleCount,$WithinSeconds,$TimeoutSeconds)
+
+$Threshold       = [int]::Parse($Threshold)
+$IntervalSeconds = [int]::Parse($IntervalSeconds)
+$MatchCount      = [int]::Parse($MatchCount)
+$SampleCount     = [int]::Parse($SampleCount)
+$WithinSeconds   = [int]::Parse($WithinSeconds)
+$TimeoutSeconds  = [int]::Parse($TimeoutSeconds)
 
 
 $api           = New-Object -ComObject 'MOM.ScriptAPI'
@@ -178,10 +288,9 @@ $localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)
 $regPath               = 'HKLM:\SOFTWARE\ABCIT\NetstatWatcher'
 $filePath              = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty FilePath
 
-$netStatIpFile         = $filePath + '\' + 'netstatIp.txt'		
+$netStatIpFile         = $filePath + '\' + 'netstatIp' + $MonitorItem + '.txt'		
 
-
-$regIPPat              = '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+$regIpPat              = '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 $regNamePat            = '[a-zA-Z]{1,}[-_\.]?[0-9]?'
 		 
  
@@ -218,15 +327,15 @@ Function Format-NetstatData {
 				$remoteIP        = ($netStatItmParts[3] -split ':')[0]
 				$remotePort      = ($netStatItmParts[3] -split ':')[1]
 				$connectState    = $netStatItmParts[4]
-				$procId          = $netStatItmParts[5]
-				
+				$procId          = $netStatItmParts[5]				
+
 				$procInfo = $allProcesses | Where-Object { $_.id -eq $procId }
 				$procName = $procInfo.Name												
 
 				if ($localIPAddresses -contains $localIP) {
 					$localName = $localComputerName
 				}					
-			
+			                                                         
 				if (($localIp -match $regIpPat -and $remoteIp -match $regIpPat) -and ($remoteIP -notmatch '0.0.0.0|127.0.0.1') ) {
 					$myNetHsh = @{'proto' = $proto}
 					$myNetHsh.Add('localIP', $localIP)
@@ -311,10 +420,10 @@ if($MonitorItem -eq 'tcpConnection') {
 
 	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
 	
-	if (Test-Path -Path $monitoredTcpConnectsFilePath) {				
-				
-		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath		
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {						
 		
+		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath					
+
 		foreach ($tcpConnect in $monitoredTcpConnects) {
 
 			$remoteIP        = ''
@@ -333,102 +442,163 @@ if($MonitorItem -eq 'tcpConnection') {
 						
 			if ($remoteName -and ([String]::IsNullOrEmpty($remoteIP))) {
 				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
-			} 
-			
+			} 		
+				
 			if ($remotePort -and $remoteIP) {	
 				
-				$connectDetails = $netStatIPConnects | Where-Object { $_.remotePort -eq $remotePort -and $_.remoteIP -eq $remoteIP }							
+				$SampleResults = @()			
+			  
+				if (-not $WithinSeconds) {					
+					$WithinSeconds = $IntervalSeconds					
+				}
+
+				if ($WithinSeconds -ge $IntervalSeconds) {					
+					$WithinSeconds = $IntervalSeconds					
+				}
+			
+				if (-not $MatchCount) {					
+					$MatchCount = 3					
+				}
+
+				if (-not $SampleCount) {					
+					$SampleCount = $MatchCount					
+				}
+
+				if ($MatchCount -gt $SampleCount) {					
+					$MatchCount = $SampleCount					
+				}
 				
-				if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails)) {
+				if ($WithinSeconds -gt $TimeoutSeconds) {					
+					$WithinSeconds = $TimeoutSeconds					
+				}					
+							
+				$timeToWait = $WithinSeconds / $SampleCount
+				$timeToWait = [Math]::Round($timeToWait)							
+
+				for ($loopRunner = 1; $loopRunner -le $SampleCount; $loopRunner ++) {
 					
-					$localIP         = $localIPAddresses					
-					$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
-					$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
-
-					$connectionState = 'No active connection found.'									
+					$doForeachFlag = $true			
+						
+					$connectDetails = $netStatIPConnects | Where-Object { $_.remotePort -eq $remotePort -and $_.remoteIP -eq $remoteIP }							
 				
-					$state           = 'Red'
-					$localName       = 'NA'
-					$localPort       = 'NA'										
-					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName)`n ConnecionState: $($connectionState)`n"
-					$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"								
-											
-					$bag = $api.CreatePropertybag()								
-					$bag.AddValue("Key",$key)		
-					$bag.AddValue("State",$state)				
-					$bag.AddValue("Supplement",$supplement)		
-					$bag.AddValue("TestedAt",$testedAt)			
-					$bag	
+					if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails)) {					
 
-					continue
+						$localIP         = $localIPAddresses					
+						$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+						$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+						$testedAt        = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+						$connectionState = 'No active connection found.'									
+				
+						$state           = 'Red'
+						$localName       = 'NA'
+						$localPort       = 'NA'										
+						$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName)`n ConnecionState: $($connectionState)`n"
+						$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"																		
 					
-				} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))							
+						$myBagHsh = @{'Key' = $key}
+						$myBagHsh.Add('State', $state)
+						$myBagHsh.Add('Supplement', $supplement)
+						$myBagHsh.Add('TestedAt', $testedAt)
+						$myBagObj = New-Object -TypeName PSObject -Property $myBagHsh
+						$SampleResults += $myBagObj
+
+						$doForeachFlag = $false										
+						
+						
+					} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))											
+
+					foreach ($connDetail in $connectDetails) {								
+
+						$connectionState = ''
+						$supplement      = ''
+
+						$localIP         = $connDetail.localIP
+						$localName       = $connDetail.localName												
+
+						if ([String]::IsNullOrEmpty($remoteName)) {
+							$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+							if ($tmpName -ne $remoteIP) {
+								$tmpName    = $tmpName -replace $localComputerDomain,''
+								$tmpName    = $tmpName -replace '\.',''
+								$remoteName = $tmpName          
+							} else {
+								$remoteName = 'No reverse record in DNS.'
+							}
+						}
+
+						if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+							$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+							if ($tmpName -ne $remoteIP) {
+								$tmpName    = $tmpName -replace $localComputerDomain,''
+								$tmpName    = $tmpName -replace '\.',''
+								$remoteName = $tmpName
+							} else {
+								$remoteName = 'No reverse record in DNS.'
+							}
+						}
+
+						$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+						$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+						$testedAt        = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+						$connectionState = $connDetail.connectState
+
+						$supplement      = "localIP: $($localIP)`t  `n procName: $($procName)`t `n ConnecionState: $($connectionState)`n"
+						$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"						
+
+						if ($connectionState -eq 'ESTABLISHED') {
+							$state       = 'Green'						
+						} elseif ($connectionState -eq 'TIME_WAIT') {						
+							$state       = 'Yellow'
+							$supplement += 'TIME_WAIT = Local endpoint (this computer) has closed the connection.'
+						} else {
+							$state       = 'Red'
+							$supplement += 'CLOSE_WAIT = Remote endpoint (this computer) has closed the connection.'
+						}																						
+					
+						if ($doForeachFlag) {
+							$myBagHsh = @{'Key' = $key}
+							$myBagHsh.Add('State', $state)
+							$myBagHsh.Add('Supplement', $supplement)
+							$myBagHsh.Add('TestedAt', $testedAt)
+							$myBagObj = New-Object -TypeName PSObject -Property $myBagHsh
+							$SampleResults += $myBagObj														
+						}				
+						
+					} #END foreach ($connDetail in $connectDetails)					
+										
+					Start-Sleep -Seconds $timeToWait					
+
+				} #END for ($loopRunner = 1; $loopRunner -le $SampleCount; $loopRunner++ )						
 				
-
-				foreach ($connDetail in $connectDetails) {								
-
-					$connectionState = ''
-					$supplement      = ''
-
-					$localIP         = $connDetail.localIP
-					$localName       = $connDetail.localName												
-
-					if ([String]::IsNullOrEmpty($remoteName)) {
-						$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
-						if ($tmpName -ne $remoteIP) {
-							$tmpName    = $tmpName -replace $localComputerDomain,''
-							$tmpName    = $tmpName -replace '\.',''
-							$remoteName = $tmpName          
-						} else {
-							$remoteName = 'No reverse record in DNS.'
-						}
-					}
-
-					if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
-						$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
-						if ($tmpName -ne $remoteIP) {
-							$tmpName    = $tmpName -replace $localComputerDomain,''
-							$tmpName    = $tmpName -replace '\.',''
-							$remoteName = $tmpName
-						} else {
-							$remoteName = 'No reverse record in DNS.'
-						}
-					}
-
-					$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
-					$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
-
-					$connectionState = $connDetail.connectState
-
-					$supplement      = "localIP: $($localIP)`t  `n procName: $($procName)`t `n ConnecionState: $($connectionState)`n"
-					$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"						
-
-					if ($connectionState -eq 'ESTABLISHED') {
-						$state       = 'Green'						
-					} elseif ($connectionState -eq 'TIME_WAIT') {						
-						$state       = 'Yellow'
-						$supplement += 'TIME_WAIT = Local endpoint (this computer) has closed the connection.'
-					} else {
-						$state       = 'Red'
-						$supplement += 'CLOSE_WAIT = Remote endpoint (this computer) has closed the connection.'
-					}																						
-
-					$bag = $api.CreatePropertybag()								
-					$bag.AddValue("Key",$key)		
-					$bag.AddValue("State",$state)				
-					$bag.AddValue("Supplement",$supplement)		
-					$bag.AddValue("TestedAt",$testedAt)			
-					$bag										
-						
-				} #END foreach ($connDetail in $connectDetails)
-
-						
+				$sampleResultsGreen  = ($SampleResults | Where-Object {$_.State -eq 'Green'}).count				
+				$sampleResultsRed    = ($SampleResults | Where-Object {$_.State -eq 'Red'}).count
+				$sampleResultsYellow = ($SampleResults | Where-Object {$_.State -eq 'Yellow'}).count
+												
+				if ($sampleResultsGreen -ge $MatchCount) {
+					$state = 'Green'
+				} else {
+					$state = ($SampleResults[($SampleResults.count) -1]).State
+				}
+				
+				$Key        = ($SampleResults[($SampleResults.count) -1]).Key
+				$supplement = ($SampleResults[($SampleResults.count) -1]).Supplement
+				$testedAt   = ($SampleResults[($SampleResults.count) -1]).testedAt				
+				
+				$bag = $api.CreatePropertybag()								
+				$bag.AddValue("Key",$key)		
+				$bag.AddValue("State",$state)				
+				$bag.AddValue("Supplement",$supplement)		
+				$bag.AddValue("TestedAt",$testedAt)			
+				$bag									
+									
 			} else {
 
 				$foo = 'No details this time, not sending to inventory.'
 
-			} # END	if ($connectDetails)					
-		
+			} # END	if ($connectDetails)		
+								
 		} #END foreach($tcpConnect in $monitoredTcpConnects)
 
 
@@ -466,7 +636,7 @@ if($MonitorItem -eq 'tcpConnection') {
 			if ($localPort -and $ipProtocol -and $procName) {
 
 				if ([string]::IsNullOrEmpty($localIP)) {
-					$localIP = '-'
+					$localIP = '-'					
 				}
 
 				if ([string]::IsNullOrEmpty($comment)) {
@@ -474,15 +644,15 @@ if($MonitorItem -eq 'tcpConnection') {
 				}
 				
 				$supplement    =  "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `t proto: $($ipProtocol)"						
-
+				
 				$listenDetails = $netStatIPConnects | Where-Object { ($_.procName -imatch $procName) -and ($_.proto -imatch $ipProtocol) -and ($_.localPort -imatch $localPort) }
 				
 				if ([string]::IsNullOrEmpty($listenDetails) -or [string]::IsNullOrWhiteSpace($listenDetails)) {								
 					
 					$Key             = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
 					$connectionState = 'No active connection found.'											
-					$state           = 'Red'					
-													
+					$state           = 'Bad'																						
+										
 					$bag = $api.CreatePropertybag()								
 					$bag.AddValue("Key",$key)		
 					$bag.AddValue("State",$state)				
@@ -510,7 +680,7 @@ if($MonitorItem -eq 'tcpConnection') {
 					$procName        = $listener.procName
 					$comment         = $listener.comment
 					$connectionState = $listener.connectState					
-					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `C.S.: $($connectionState))"	
+					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `n connectionstate: $($connectionState))"	
 
 					if ([string]::IsNullOrEmpty($localIP)) {
 						$localIP = '-'
@@ -522,22 +692,22 @@ if($MonitorItem -eq 'tcpConnection') {
 
 					if ($ipProtocol -ieq 'TCP') {
 						if ($connectionState -eq 'LISTENING') {
-							$state       = 'Green'						
+							$state       = 'Good'						
 						} elseif ($connectionState -eq 'TIME_WAIT') {						
-							$state       = 'Yellow'
+							$state       = 'Good'
 							$supplement += "`nTIME_WAIT = Local endpoint (this computer) has closed the connection."
 						} else {
-							$state       = 'Red'
+							$state       = 'Bad'
 							$supplement += "`nCLOSE_WAIT = Remote endpoint (this computer) has closed the connection."
 						}																		
 					} else {
-						$state       = 'Green'
+						$state       = 'Good'
 						$supplement += "`nUDP - No additional information exposted. "					
 					} # END if ($ipProtocol -eq 'TCP')		
 										
 					
-					$Key = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"								
-					
+					$Key = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"																		
+
 					$bag = $api.CreatePropertybag()								
 					$bag.AddValue("Key",$key)		
 					$bag.AddValue("State",$state)				
@@ -556,7 +726,7 @@ if($MonitorItem -eq 'tcpConnection') {
 } else {
 
 	$foo = 'Invalid discovery paramater'
-
+	
 }]]></ScriptBody>
                 <Parameters>
                   <Parameter>
@@ -564,11 +734,520 @@ if($MonitorItem -eq 'tcpConnection') {
                     <Value>$Config/MonitorItem$</Value>
                   </Parameter>
                   <Parameter>
-                    <Name>Threshold</Name>
-                    <Value>$Config/Threshold$</Value>
+                    <Name>IntervalSeconds</Name>
+                    <Value>$Config/IntervalSeconds$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>MatchCount</Name>
+                    <Value>$Config/MatchCount$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>SampleCount</Name>
+                    <Value>$Config/SampleCount$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>WithinSeconds</Name>
+                    <Value>$Config/WithinSeconds$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>TimeoutSeconds</Name>
+                    <Value>$Config/TimeoutSeconds$</Value>
                   </Parameter>
                 </Parameters>
-                <TimeoutSeconds>300</TimeoutSeconds>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="PSScript" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+        <InputType>System!System.BaseData</InputType>
+      </ProbeActionModuleType>
+      <ProbeActionModuleType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Probe" Accessibility="Internal" Batching="false" PassThrough="false">
+        <Configuration>
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="PSScript" TypeID="Windows!Microsoft.Windows.PowerShellPropertyBagProbe">
+                <ScriptName>MonitorNetstatWatcherItems.ps1</ScriptName>
+                <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$MonitorItem,$Threshold,$IntervalSeconds,$MatchCount,$SampleCount,$WithinSeconds,$TimeoutSeconds)
+
+$Threshold       = [int]::Parse($Threshold)
+$IntervalSeconds = [int]::Parse($IntervalSeconds)
+$MatchCount      = [int]::Parse($MatchCount)
+$SampleCount     = [int]::Parse($SampleCount)
+$WithinSeconds   = [int]::Parse($WithinSeconds)
+$TimeoutSeconds  = [int]::Parse($TimeoutSeconds)
+
+
+$api           = New-Object -ComObject 'MOM.ScriptAPI'
+$discoveryData = $api.CreateDiscoveryData(0, $sourceId, $managedEntityId)
+
+$Global:Error.Clear()
+$script:ErrorView      = 'NormalView'
+$ErrorActionPreference = 'Continue'
+
+$testedAt              = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+
+$localComputerName     = $env:COMPUTERNAME
+$localComputerDomain   = ([System.DirectoryServices.ActiveDirectory.Domain]::GetComputerDomain()).Name
+$localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)) | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString	| Select-Object -First 1
+
+$regPath               = 'HKLM:\SOFTWARE\ABCIT\NetstatWatcher'
+$filePath              = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty FilePath
+
+$netStatIpFile         = $filePath + '\' + 'netstatIp' + $MonitorItem + '.txt'		
+
+$regIpPat              = '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+$regNamePat            = '[a-zA-Z]{1,}[-_\.]?[0-9]?'
+		 
+ 
+if (Test-Path -Path $netStatIpFile) {
+	Remove-Item -Path $netStatIpFile -Force
+}       		
+		
+
+Function Format-NetstatData {
+
+	param(
+		[Parameter(Mandatory=$true)][object]$netstatInPut,
+		[Parameter(Mandatory=$true)][string]$qryType,				
+		[Parameter(Mandatory=$true)][ref]$nestatIPData
+	)
+
+	$allProcesses    = Get-Process | Select-Object -Property Name, id
+	$netStatConnects = New-Object -TypeName System.Collections.Generic.List[object]
+	$netStatArr      =  $netstatInPut -split "`r`n"						
+
+	$netStatArr | ForEach-Object {
+
+		$netStatItm = $_
+
+		if ($netStatItm -match "\d") {       
+
+			$netStatItmParts = [Regex]::Split($netStatItm,"\s{2,}")							
+
+			if ($qryType -eq 'tcpConnection') {
+			
+				$proto           = $netStatItmParts[1]					
+				$localIP         = ($netStatItmParts[2] -split ':')[0]
+				$localPort       = ($netStatItmParts[2] -split ':')[1]					
+				$remoteIP        = ($netStatItmParts[3] -split ':')[0]
+				$remotePort      = ($netStatItmParts[3] -split ':')[1]
+				$connectState    = $netStatItmParts[4]
+				$procId          = $netStatItmParts[5]				
+
+				$procInfo = $allProcesses | Where-Object { $_.id -eq $procId }
+				$procName = $procInfo.Name												
+
+				if ($localIPAddresses -contains $localIP) {
+					$localName = $localComputerName
+				}					
+			                                                         
+				if (($localIp -match $regIpPat -and $remoteIp -match $regIpPat) -and ($remoteIP -notmatch '0.0.0.0|127.0.0.1') ) {
+					$myNetHsh = @{'proto' = $proto}
+					$myNetHsh.Add('localIP', $localIP)
+					$myNetHsh.Add('localName', $localName)						
+					$myNetHsh.Add('remoteIP', $remoteIP)
+					$myNetHsh.Add('remotePort', $remotePort)
+					$myNetHsh.Add('connectState', $connectState)
+					$myNetHsh.Add('procId', $procId)
+					$myNetHsh.Add('procName', $procName)					
+
+					$myNetObj = New-Object -TypeName PSObject -Property $myNetHsh
+					$null     = $netStatConnects.Add($myNetObj)    
+				}
+
+			} else {
+
+				$proto               = $netStatItmParts[1]		
+
+				if ($proto -ieq 'TCP') {
+					$localIP         = ($netStatItmParts[2] -split ':')[0]
+					$localPort       = ($netStatItmParts[2] -split ':')[1]					
+					$remoteIP        = ($netStatItmParts[3] -split ':')[0]
+					$remotePort      = ($netStatItmParts[3] -split ':')[1]
+					$connectState    = $netStatItmParts[4]
+					$procId          = $netStatItmParts[5]					
+				} else {
+					$localIP         = ($netStatItmParts[2] -split ':')[0]
+					$localPort       = ($netStatItmParts[2] -split ':')[1]					
+					$remoteIP        = ($netStatItmParts[3] -split ':')[0]
+					$remotePort      = ($netStatItmParts[3] -split ':')[1]
+					$connectState    = '-'
+					$procId          = $netStatItmParts[4]					
+				}				
+							
+				$procInfo = $allProcesses | Where-Object { $_.id -eq $procId }
+				$procName = $procInfo.Name								
+				
+				if ($localIPAddresses -contains $localIP) {
+					$localName = $localComputerName
+				}					
+
+				if (($localIp -match $regIpPat) -and ($remoteIP -match '\*|0.0.0.0|127.0.0.1') ) {
+					$myNetHsh = @{'proto' = $proto}
+					$myNetHsh.Add('localIP', $localIP)
+					$myNetHsh.Add('localName', $localName)													
+					$myNetHsh.Add('localPort', $localPort)						
+					$myNetHsh.Add('connectState', $connectState)
+					$myNetHsh.Add('procId', $procId)
+					$myNetHsh.Add('procName', $procName)											
+
+					$myNetObj = New-Object -TypeName PSObject -Property $myNetHsh
+					$null     = $netStatConnects.Add($myNetObj)    
+				} 
+
+			} # END if ($qryType -eq 'tcpConnect')										
+
+		} #END if ($netStatItm -match "\d") 
+
+	} #END $netStatIpArr | ForEach-Object {} 
+
+	If ($netStatConnects.count -gt 0) {
+		$rtn = $true
+		$nestatIPData.Value = $netStatConnects
+	} else {
+		$rtn = $false	
+	}
+
+	$rtn
+
+} #END Funciton Format-NetstatIPData		
+
+
+Invoke-Expression "C:\Windows\System32\netstat.exe -ano" | Out-File -FilePath $netStatIpFile
+$netStatIp = Get-Content -Path $netStatIpFile | Out-String		
+
+$netStatIPConnects = New-Object -TypeName System.Collections.Generic.List[object]
+Format-NetstatData -netstatInPut $netStatIp -qryType $MonitorItem -nestatIPData ([ref]$netStatIPConnects)			
+
+
+
+if($MonitorItem -eq 'tcpConnection') {
+
+	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
+	
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {						
+		
+		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath					
+
+		foreach ($tcpConnect in $monitoredTcpConnects) {
+
+			$remoteIP        = ''
+			$remoteName      = ''
+			$remotePort      = ''
+			$comment         = ''
+			$procName        = ''
+			$connectDetails  = ''
+			$connectionState = ''
+
+			$remoteIP        = $tcpConnect.remoteIP
+			$remoteName      = $tcpConnect.remoteName
+			$remotePort      = $tcpConnect.remotePort
+			$comment         = $tcpConnect.comment
+			$procName        = $tcpConnect.procName			
+						
+			if ($remoteName -and ([String]::IsNullOrEmpty($remoteIP))) {
+				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
+			} 		
+				
+			if ($remotePort -and $remoteIP) {	
+				
+				$SampleResults = @()			
+			  
+				if (-not $WithinSeconds) {					
+					$WithinSeconds = $IntervalSeconds					
+				}
+
+				if ($WithinSeconds -ge $IntervalSeconds) {					
+					$WithinSeconds = $IntervalSeconds					
+				}
+			
+				if (-not $MatchCount) {					
+					$MatchCount = 3					
+				}
+
+				if (-not $SampleCount) {					
+					$SampleCount = $MatchCount					
+				}
+
+				if ($MatchCount -gt $SampleCount) {					
+					$MatchCount = $SampleCount					
+				}
+				
+				if ($WithinSeconds -gt $TimeoutSeconds) {					
+					$WithinSeconds = $TimeoutSeconds					
+				}					
+							
+				$timeToWait = $WithinSeconds / $SampleCount
+				$timeToWait = [Math]::Round($timeToWait)							
+
+				for ($loopRunner = 1; $loopRunner -le $SampleCount; $loopRunner ++) {
+					
+					$doForeachFlag = $true			
+						
+					$connectDetails = $netStatIPConnects | Where-Object { $_.remotePort -eq $remotePort -and $_.remoteIP -eq $remoteIP }							
+				
+					if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails)) {					
+
+						$localIP         = $localIPAddresses					
+						$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+						$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+						$testedAt        = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+						$connectionState = 'No active connection found.'									
+				
+						$state           = 'Red'
+						$localName       = 'NA'
+						$localPort       = 'NA'										
+						$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName)`n ConnecionState: $($connectionState)`n"
+						$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"																		
+					
+						$myBagHsh = @{'Key' = $key}
+						$myBagHsh.Add('State', $state)
+						$myBagHsh.Add('Supplement', $supplement)
+						$myBagHsh.Add('TestedAt', $testedAt)
+						$myBagObj = New-Object -TypeName PSObject -Property $myBagHsh
+						$SampleResults += $myBagObj
+
+						$doForeachFlag = $false										
+						
+						
+					} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))											
+
+					foreach ($connDetail in $connectDetails) {								
+
+						$connectionState = ''
+						$supplement      = ''
+
+						$localIP         = $connDetail.localIP
+						$localName       = $connDetail.localName												
+
+						if ([String]::IsNullOrEmpty($remoteName)) {
+							$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+							if ($tmpName -ne $remoteIP) {
+								$tmpName    = $tmpName -replace $localComputerDomain,''
+								$tmpName    = $tmpName -replace '\.',''
+								$remoteName = $tmpName          
+							} else {
+								$remoteName = 'No reverse record in DNS.'
+							}
+						}
+
+						if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+							$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+							if ($tmpName -ne $remoteIP) {
+								$tmpName    = $tmpName -replace $localComputerDomain,''
+								$tmpName    = $tmpName -replace '\.',''
+								$remoteName = $tmpName
+							} else {
+								$remoteName = 'No reverse record in DNS.'
+							}
+						}
+
+						$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+						$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+						$testedAt        = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+						$connectionState = $connDetail.connectState
+
+						$supplement      = "localIP: $($localIP)`t  `n procName: $($procName)`t `n ConnecionState: $($connectionState)`n"
+						$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"						
+
+						if ($connectionState -eq 'ESTABLISHED') {
+							$state       = 'Green'						
+						} elseif ($connectionState -eq 'TIME_WAIT') {						
+							$state       = 'Yellow'
+							$supplement += 'TIME_WAIT = Local endpoint (this computer) has closed the connection.'
+						} else {
+							$state       = 'Red'
+							$supplement += 'CLOSE_WAIT = Remote endpoint (this computer) has closed the connection.'
+						}																						
+					
+						if ($doForeachFlag) {
+							$myBagHsh = @{'Key' = $key}
+							$myBagHsh.Add('State', $state)
+							$myBagHsh.Add('Supplement', $supplement)
+							$myBagHsh.Add('TestedAt', $testedAt)
+							$myBagObj = New-Object -TypeName PSObject -Property $myBagHsh
+							$SampleResults += $myBagObj														
+						}				
+						
+					} #END foreach ($connDetail in $connectDetails)					
+										
+					Start-Sleep -Seconds $timeToWait					
+
+				} #END for ($loopRunner = 1; $loopRunner -le $SampleCount; $loopRunner++ )						
+				
+				$sampleResultsGreen  = ($SampleResults | Where-Object {$_.State -eq 'Green'}).count				
+				$sampleResultsRed    = ($SampleResults | Where-Object {$_.State -eq 'Red'}).count
+				$sampleResultsYellow = ($SampleResults | Where-Object {$_.State -eq 'Yellow'}).count
+												
+				if ($sampleResultsGreen -ge $MatchCount) {
+					$state = 'Green'
+				} else {
+					$state = ($SampleResults[($SampleResults.count) -1]).State
+				}
+				
+				$Key        = ($SampleResults[($SampleResults.count) -1]).Key
+				$supplement = ($SampleResults[($SampleResults.count) -1]).Supplement
+				$testedAt   = ($SampleResults[($SampleResults.count) -1]).testedAt				
+				
+				$bag = $api.CreatePropertybag()								
+				$bag.AddValue("Key",$key)		
+				$bag.AddValue("State",$state)				
+				$bag.AddValue("Supplement",$supplement)		
+				$bag.AddValue("TestedAt",$testedAt)			
+				$bag									
+									
+			} else {
+
+				$foo = 'No details this time, not sending to inventory.'
+
+			} # END	if ($connectDetails)		
+								
+		} #END foreach($tcpConnect in $monitoredTcpConnects)
+
+
+	} else {
+
+		$api.LogScriptEvent('Monitor NetStatWatcher Three State.ps1',3002,1,"NetStatWatcherMon MonitorItem $($MonitorItem) - File not found in $($monitoredTcpConnectsFilePath)")
+
+	}
+
+} elseif ($MonitorItem -eq 'listeningPort') {
+	
+
+	$monitoredListeningPortsFilePath = $filePath + '\' + 'monitoredListeningPorts.csv'
+	
+	if (Test-Path -Path $monitoredListeningPortsFilePath) {	
+
+		$monitoredListeningPorts = Import-Csv -Path $monitoredListeningPortsFilePath			
+
+		foreach($listenPort in $monitoredListeningPorts) {
+			
+			$localIP       = ''
+			$localPort     = ''
+			$ipProtocol    = ''
+			$procName      = '' 
+			$comment       = ''
+			$listenDetails = ''
+			$state         = ''
+			
+			$localIP       = $listenPort.localIP
+			$localPort     = $listenPort.localPort
+			$ipProtocol    = ($listenPort.ipProtocol).ToUpper()
+			$procName      = $listenPort.procName
+			$comment       = $listenPort.comment
+
+			if ($localPort -and $ipProtocol -and $procName) {
+
+				if ([string]::IsNullOrEmpty($localIP)) {
+					$localIP = '-'					
+				}
+
+				if ([string]::IsNullOrEmpty($comment)) {
+					$comment = '-'
+				}
+				
+				$supplement    =  "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `t proto: $($ipProtocol)"						
+				
+				$listenDetails = $netStatIPConnects | Where-Object { ($_.procName -imatch $procName) -and ($_.proto -imatch $ipProtocol) -and ($_.localPort -imatch $localPort) }
+				
+				if ([string]::IsNullOrEmpty($listenDetails) -or [string]::IsNullOrWhiteSpace($listenDetails)) {								
+					
+					$Key             = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
+					$connectionState = 'No active connection found.'											
+					$state           = 'Bad'																						
+										
+					$bag = $api.CreatePropertybag()								
+					$bag.AddValue("Key",$key)		
+					$bag.AddValue("State",$state)				
+					$bag.AddValue("Supplement",$supplement)		
+					$bag.AddValue("TestedAt",$testedAt)			
+					$bag	
+
+					continue
+					
+				} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))							
+												
+				foreach ($listener in $listenDetails) {
+
+					$localIP         = ''
+					$localPort       = ''
+					$ipProtocol      = ''
+					$procName        = '' 
+					$comment         = ''
+					$connectionState = ''
+					$state           = ''										
+
+					$localIP         = $listener.localIP
+					$localPort       = $listener.localPort
+					$ipProtocol      = ($listener.proto).ToUpper()
+					$procName        = $listener.procName
+					$comment         = $listener.comment
+					$connectionState = $listener.connectState					
+					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `n connectionstate: $($connectionState))"	
+
+					if ([string]::IsNullOrEmpty($localIP)) {
+						$localIP = '-'
+					}
+
+					if ([string]::IsNullOrEmpty($comment)) {
+						$comment = '-'
+					}					
+
+					if ($ipProtocol -ieq 'TCP') {
+						if ($connectionState -eq 'LISTENING') {
+							$state       = 'Good'						
+						} elseif ($connectionState -eq 'TIME_WAIT') {						
+							$state       = 'Good'
+							$supplement += "`nTIME_WAIT = Local endpoint (this computer) has closed the connection."
+						} else {
+							$state       = 'Bad'
+							$supplement += "`nCLOSE_WAIT = Remote endpoint (this computer) has closed the connection."
+						}																		
+					} else {
+						$state       = 'Good'
+						$supplement += "`nUDP - No additional information exposted. "					
+					} # END if ($ipProtocol -eq 'TCP')		
+										
+					
+					$Key = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"																		
+
+					$bag = $api.CreatePropertybag()								
+					$bag.AddValue("Key",$key)		
+					$bag.AddValue("State",$state)				
+					$bag.AddValue("Supplement",$supplement)		
+					$bag.AddValue("TestedAt",$testedAt)			
+					$bag															
+
+				} #END foreach ($listener in $listenDetails)
+				
+			} #END if ($localPort -and $ipProtocol -and $procName)
+
+		} #END foreach($listenPort in $monitoredListeningPorts)
+		
+	} #END if (Test-Path -Path $monitoredListeningPortsFilePath)		
+
+} else {
+
+	$foo = 'Invalid discovery paramater'
+	
+}]]></ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>MonitorItem</Name>
+                    <Value>$Config/MonitorItem$</Value>
+                  </Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
               </ProbeAction>
             </MemberModules>
             <Composition>
@@ -592,12 +1271,18 @@ if($MonitorItem -eq 'tcpConnection') {
           <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <OverrideableParameters>
           <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
           <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
-          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />
+          <OverrideableParameter ID="MatchCount" Selector="$Config/MatchCount$" ParameterType="int" />
+          <OverrideableParameter ID="SampleCount" Selector="$Config/SampleCount$" ParameterType="int" />
+          <OverrideableParameter ID="WithinSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
         </OverrideableParameters>
         <MonitorImplementation>
           <MemberModules>
@@ -606,12 +1291,19 @@ if($MonitorItem -eq 'tcpConnection') {
               <SyncTime>$Config/SyncTime$</SyncTime>
               <MonitorItem>$Config/MonitorItem$</MonitorItem>
               <Key>$Config/Key$</Key>
-              <Threshold>$Config/Threshold$</Threshold>
+              <MatchCount>$Config/MatchCount$</MatchCount>
+              <SampleCount>$Config/SampleCount$</SampleCount>
+              <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
             </DataSource>
             <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
             <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
+              <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
               <MonitorItem>$Config/MonitorItem$</MonitorItem>
-              <Threshold>$Config/Threshold$</Threshold>
+              <MatchCount>$Config/MatchCount$</MatchCount>
+              <SampleCount>$Config/SampleCount$</SampleCount>
+              <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
             </ProbeAction>
             <ConditionDetection ID="FilterUnderThreshold" TypeID="System!System.ExpressionFilter">
               <Expression>
@@ -666,6 +1358,78 @@ if($MonitorItem -eq 'tcpConnection') {
             </RegularDetection>
             <RegularDetection MonitorTypeStateID="OverErrorThreshold">
               <Node ID="FilterOverErrorThreshold">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+          </RegularDetections>
+        </MonitorImplementation>
+      </UnitMonitorType>
+      <UnitMonitorType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.MonitorType" Accessibility="Internal">
+        <MonitorTypeStates>
+          <MonitorTypeState ID="Success" NoDetection="false" />
+          <MonitorTypeState ID="Failure" NoDetection="false" />
+        </MonitorTypeStates>
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <MonitorImplementation>
+          <MemberModules>
+            <DataSource ID="DataSource" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag.Filtered">
+              <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+              <SyncTime>$Config/SyncTime$</SyncTime>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              <MonitorItem>$Config/MonitorItem$</MonitorItem>
+              <Key>$Config/Key$</Key>
+            </DataSource>
+            <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
+            <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Probe">
+              <MonitorItem>$Config/MonitorItem$</MonitorItem>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+            </ProbeAction>
+            <ConditionDetection ID="FilterSuccess" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Good</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+            <ConditionDetection ID="FilterFailure" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Bad</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+          </MemberModules>
+          <RegularDetections>
+            <RegularDetection MonitorTypeStateID="Success">
+              <Node ID="FilterSuccess">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+            <RegularDetection MonitorTypeStateID="Failure">
+              <Node ID="FilterFailure">
                 <Node ID="DataSource" />
               </Node>
             </RegularDetection>
@@ -978,10 +1742,11 @@ $discoveryData]]></ScriptBody>
           <DiscoveryClass TypeID="Network.Windows.Computer.NetstatWatcher.ListeningPort" />
         </DiscoveryTypes>
         <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
-          <IntervalSeconds>1600</IntervalSeconds>
+          <IntervalSeconds>3600</IntervalSeconds>
           <SyncTime />
           <ScriptName>DiscoverNetstatWatcherItems.ps1</ScriptName>
           <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$discoveryItem,$filePath)
+
 
 
 $api           = New-Object -ComObject 'MOM.ScriptAPI'
@@ -1168,10 +1933,11 @@ $discoveryData]]></ScriptBody>
           <DiscoveryClass TypeID="Network.Windows.Computer.NetstatWatcher.TcpConnection" />
         </DiscoveryTypes>
         <DataSource ID="DS" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
-          <IntervalSeconds>1800</IntervalSeconds>
+          <IntervalSeconds>3600</IntervalSeconds>
           <SyncTime />
           <ScriptName>DiscoverNetstatWatcherItems.ps1</ScriptName>
           <ScriptBody><![CDATA[param($sourceId,$managedEntityId,$discoveryItem,$filePath)
+
 
 
 $api           = New-Object -ComObject 'MOM.ScriptAPI'
@@ -1589,7 +2355,7 @@ $discoveryData]]></ScriptBody>
       </Discovery>
     </Discoveries>
     <Monitors>
-      <UnitMonitor ID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" Accessibility="Internal" Enabled="true" Target="Network.Windows.Computer.NetstatWatcher.ListeningPort" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" ConfirmDelivery="false">
+      <UnitMonitor ID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" Accessibility="Internal" Enabled="true" Target="Network.Windows.Computer.NetstatWatcher.ListeningPort" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.MonitorType" ConfirmDelivery="false">
         <Category>AvailabilityHealth</Category>
         <AlertSettings AlertMessage="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort.AlertMessage">
           <AlertOnState>Error</AlertOnState>
@@ -1597,22 +2363,22 @@ $discoveryData]]></ScriptBody>
           <AlertPriority>Normal</AlertPriority>
           <AlertSeverity>MatchMonitorHealth</AlertSeverity>
           <AlertParameters>
-            <AlertParameter1>$Data/Context/Property[@Name='TestedAt']$</AlertParameter1>
-            <AlertParameter2>$Data/Context/Property[@Name='State']$</AlertParameter2>
-            <AlertParameter3>$Data/Context/Property[@Name='Supplement']$</AlertParameter3>
+            <AlertParameter1>$Data/Context/Property[@Name='Key']$</AlertParameter1>
+            <AlertParameter2>$Data/Context/Property[@Name='TestedAt']$</AlertParameter2>
+            <AlertParameter3>$Data/Context/Property[@Name='State']$</AlertParameter3>
+            <AlertParameter4>$Data/Context/Property[@Name='Supplement']$</AlertParameter4>
           </AlertParameters>
         </AlertSettings>
         <OperationalStates>
-          <OperationalState ID="UnderThreshold" MonitorTypeStateID="UnderThreshold" HealthState="Success" />
-          <OperationalState ID="OverWarningThreshold" MonitorTypeStateID="OverWarningThreshold" HealthState="Warning" />
-          <OperationalState ID="OverErrorThreshold" MonitorTypeStateID="OverErrorThreshold" HealthState="Error" />
+          <OperationalState ID="Success" MonitorTypeStateID="Success" HealthState="Success" />
+          <OperationalState ID="Failure" MonitorTypeStateID="Failure" HealthState="Error" />
         </OperationalStates>
         <Configuration>
           <IntervalSeconds>300</IntervalSeconds>
           <SyncTime />
+          <TimeoutSeconds>120</TimeoutSeconds>
           <MonitorItem>listeningPort</MonitorItem>
           <Key>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.ListeningPort"]/Key$</Key>
-          <Threshold />
         </Configuration>
       </UnitMonitor>
       <UnitMonitor ID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer" Accessibility="Internal" Enabled="true" Target="Network.Windows.Computer.NetstatWatcher.Computer" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" TypeID="Windows!Microsoft.Windows.WmiBased.Performance.ConsecutiveSamplesThreshold" ConfirmDelivery="false">
@@ -1648,9 +2414,10 @@ $discoveryData]]></ScriptBody>
           <AlertPriority>Normal</AlertPriority>
           <AlertSeverity>MatchMonitorHealth</AlertSeverity>
           <AlertParameters>
-            <AlertParameter1>$Data/Context/Property[@Name='TestedAt']$</AlertParameter1>
-            <AlertParameter2>$Data/Context/Property[@Name='State']$</AlertParameter2>
-            <AlertParameter3>$Data/Context/Property[@Name='Supplement']$</AlertParameter3>
+            <AlertParameter1>$Data/Context/Property[@Name='Key']$</AlertParameter1>
+            <AlertParameter2>$Data/Context/Property[@Name='TestedAt']$</AlertParameter2>
+            <AlertParameter3>$Data/Context/Property[@Name='State']$</AlertParameter3>
+            <AlertParameter4>$Data/Context/Property[@Name='Supplement']$</AlertParameter4>
           </AlertParameters>
         </AlertSettings>
         <OperationalStates>
@@ -1659,11 +2426,14 @@ $discoveryData]]></ScriptBody>
           <OperationalState ID="OverErrorThreshold" MonitorTypeStateID="OverErrorThreshold" HealthState="Error" />
         </OperationalStates>
         <Configuration>
-          <IntervalSeconds>240</IntervalSeconds>
+          <IntervalSeconds>300</IntervalSeconds>
           <SyncTime />
           <MonitorItem>tcpConnection</MonitorItem>
           <Key>$Target/Property[Type="Network.Windows.Computer.NetstatWatcher.TcpConnection"]/Key$</Key>
-          <Threshold />
+          <MatchCount>3</MatchCount>
+          <SampleCount>3</SampleCount>
+          <WithinSeconds>240</WithinSeconds>
+          <TimeoutSeconds>3600</TimeoutSeconds>
         </Configuration>
       </UnitMonitor>
     </Monitors>
@@ -1795,26 +2565,22 @@ $discoveryData]]></ScriptBody>
         </DisplayString>
         <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort.AlertMessage">
           <Name>netwatcher - ListeningPort Error</Name>
-          <Description>Please check. ListeningPort is down.
+          <Description>Please check. ListeningPort {0} stopped liseten.
 
 
-TestedAt: {0}
-Last check Result: {1}
+TestedAt: {1}
+Last check Result: {2}
 
 
-Supplement: {2}</Description>
+Supplement: {3}</Description>
         </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="UnderThreshold">
-          <Name>UnderThreshold</Name>
-          <Description>UnderThreshold</Description>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="Success">
+          <Name>Success</Name>
+          <Description>Success</Description>
         </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="OverWarningThreshold">
-          <Name>OverWarningThreshold</Name>
-          <Description>OverWarningThreshold</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="OverErrorThreshold">
-          <Name>OverErrorThreshold</Name>
-          <Description>OverErrorThreshold</Description>
+        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.listeningPort" SubElementID="Failure">
+          <Name>Failure</Name>
+          <Description>Failure</Description>
         </DisplayString>
         <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.netstatWatcher.Computer">
           <Name>Monitor netstatWatcher Computer</Name>
@@ -1838,14 +2604,13 @@ Supplement: {2}</Description>
         </DisplayString>
         <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection.AlertMessage">
           <Name>netwatcher - tcpConnection Error</Name>
-          <Description>Please check. tcpConnection is down.
+          <Description>Please check. tcpConnection {0} is down.
+
+TestedAt: {1}
+Last check Result: {2}
 
 
-TestedAt: {0}
-Last check Result: {1}
-
-
-Supplement: {2}</Description>
+Supplement: {3}</Description>
         </DisplayString>
         <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection" SubElementID="UnderThreshold">
           <Name>UnderThreshold</Name>
@@ -1858,54 +2623,6 @@ Supplement: {2}</Description>
         <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Monitor.tcpConnection" SubElementID="OverErrorThreshold">
           <Name>OverErrorThreshold</Name>
           <Description>OverErrorThreshold</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered">
-          <Name>NetstatWatcher 3 State Monitor</Name>
-          <Description>NetstatWatcher 3 State Monitor</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="IntervalSeconds">
-          <Name>Interval Seconds</Name>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="SyncTime">
-          <Name>Sync Time</Name>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" SubElementID="Threshold">
-          <Name>Threshold</Name>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag">
-          <Name>Monitor PropertyBag</Name>
-          <Description>Monitor Property Bag</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="IntervalSeconds">
-          <Name>Intervarl Seconds</Name>
-          <Description>Intervarl Seconds</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="SyncTime">
-          <Name>Sync Time</Name>
-          <Description>Sync Time</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" SubElementID="Threshold">
-          <Name>Threshold</Name>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
-          <Name>NetstatWatcher Monitor Probe</Name>
-          <Description>NetstatWatcher Monitor Probe</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType">
-          <Name>NetstatWatcher 3 State Monitor Type</Name>
-          <Description>NetstatWatcher 3 State Monitor Type</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="IntervalSeconds">
-          <Name>Interval Seconds</Name>
-          <Description>Interval Seconds</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="SyncTime">
-          <Name>Sync Time</Name>
-          <Description>Sync Time</Description>
-        </DisplayString>
-        <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" SubElementID="Threshold">
-          <Name>Threshold</Name>
-          <Description>Threshold</Description>
         </DisplayString>
         <DisplayString ElementID="Network.Windows.Computer.NetstatWatcher.Folders">
           <Name>Network Windows Computer NetstatWatcher</Name>

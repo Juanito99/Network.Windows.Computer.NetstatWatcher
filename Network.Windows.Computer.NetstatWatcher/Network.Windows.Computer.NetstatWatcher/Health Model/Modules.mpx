@@ -1,20 +1,26 @@
 ﻿<ManagementPackFragment SchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <TypeDefinitions>
     <ModuleTypes>
-
+ 
       <!-- Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered -->
       <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag.Filtered" Accessibility="Internal" Batching="false">
         <Configuration>
           <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <OverrideableParameters>
           <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
-          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
-          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />          
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />          
+          <OverrideableParameter ID="MatchCount" Selector="$Config/MatchCount$" ParameterType="int" />
+          <OverrideableParameter ID="SampleCount" Selector="$Config/SampleCount$" ParameterType="int" />
+          <OverrideableParameter ID="WithinSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
         </OverrideableParameters>
         <ModuleImplementation Isolation="Any">
           <Composite>
@@ -22,9 +28,12 @@
               <DataSource ID="DS" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag">
                 <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
                 <SyncTime>$Config/SyncTime$</SyncTime>
-                <MonitorItem>$Config/MonitorItem$</MonitorItem>
-                <Threshold>$Config/Threshold$</Threshold>
-                <Key>$Config/Key$</Key>                
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>                
+                <Key>$Config/Key$</Key>
+                <MatchCount>$Config/MatchCount$</MatchCount>
+                <SampleCount>$Config/SampleCount$</SampleCount>
+                <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
               </DataSource>
               <ConditionDetection ID="Filter" TypeID="System!System.ExpressionFilter">
                 <Expression>
@@ -51,30 +60,89 @@
       </DataSourceModuleType>
 
 
+      <!-- Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag.Filtered -->
+      <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag.Filtered" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="DS" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <SyncTime>$Config/SyncTime$</SyncTime>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>
+                <Key>$Config/Key$</Key>
+              </DataSource>
+              <ConditionDetection ID="Filter" TypeID="System!System.ExpressionFilter">
+                <Expression>
+                  <SimpleExpression>
+                    <ValueExpression>
+                      <XPathQuery Type="String">Property[@Name="Key"]</XPathQuery>
+                    </ValueExpression>
+                    <Operator>Equal</Operator>
+                    <ValueExpression>
+                      <Value Type="String">$Config/Key$</Value>
+                    </ValueExpression>
+                  </SimpleExpression>
+                </Expression>
+              </ConditionDetection>
+            </MemberModules>
+            <Composition>
+              <Node ID="Filter">
+                <Node ID="DS" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      
+      
       <!-- Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag -->
       <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.PropertyBag" Accessibility="Internal" Batching="false">
         <Configuration>
           <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <OverrideableParameters>
           <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
-          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
-          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />          
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />          
+          <OverrideableParameter ID="MatchCount" Selector="$Config/MatchCount$" ParameterType="int" />
+          <OverrideableParameter ID="SampleCount" Selector="$Config/SampleCount$" ParameterType="int" />
+          <OverrideableParameter ID="WithinSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
         </OverrideableParameters>
         <ModuleImplementation Isolation="Any">
           <Composite>
             <MemberModules>
               <DataSource ID="Schedule" TypeID="System!System.SimpleScheduler">
                 <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
-                <SyncTime>$Config/SyncTime$</SyncTime>
+                <SyncTime>$Config/SyncTime$</SyncTime>                
               </DataSource>
               <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
-                <MonitorItem>$Config/MonitorItem$</MonitorItem>
-                <Threshold>$Config/Threshold$</Threshold>                
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>                
+                <MatchCount>$Config/MatchCount$</MatchCount>
+                <SampleCount>$Config/SampleCount$</SampleCount>
+                <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
               </ProbeAction>
             </MemberModules>
             <Composition>
@@ -88,11 +156,104 @@
       </DataSourceModuleType>
 
 
+      <!-- Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag -->
+      <DataSourceModuleType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Schedule" TypeID="System!System.SimpleScheduler">
+                <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+                <SyncTime>$Config/SyncTime$</SyncTime>                
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Probe">
+                <MonitorItem>$Config/MonitorItem$</MonitorItem>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="Probe">
+                <Node ID="Schedule" />
+              </Node>
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+
+      
+
       <!-- Network.Windows.Computer.NetstatWatcher.ThreeState.Probe -->
       <ProbeActionModuleType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe" Accessibility="Internal" Batching="false" PassThrough="false">
         <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <ProbeAction ID="PSScript" TypeID="Windows!Microsoft.Windows.PowerShellPropertyBagProbe">
+                <ScriptName>MonitorNetstatWatcherItems.ps1</ScriptName>
+                <ScriptBody>$IncludeFileContent/Health Model/MonitorNetstatWatcherItems.ps1$</ScriptBody>
+                <Parameters>
+                  <Parameter>
+                    <Name>MonitorItem</Name>
+                    <Value>$Config/MonitorItem$</Value>
+                  </Parameter>                  
+                  <Parameter>
+                    <Name>IntervalSeconds</Name>
+                    <Value>$Config/IntervalSeconds$</Value>
+                  </Parameter>                
+                  <Parameter>
+                    <Name>MatchCount</Name>
+                    <Value>$Config/MatchCount$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>SampleCount</Name>
+                    <Value>$Config/SampleCount$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>WithinSeconds</Name>
+                    <Value>$Config/WithinSeconds$</Value>
+                  </Parameter>
+                  <Parameter>
+                    <Name>TimeoutSeconds</Name>
+                    <Value>$Config/TimeoutSeconds$</Value>
+                  </Parameter>
+                </Parameters>                                
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>              
+               </ProbeAction>
+            </MemberModules>
+            <Composition>
+              <Node ID="PSScript" />
+            </Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+        <InputType>System!System.BaseData</InputType>
+      </ProbeActionModuleType>
+    
+      
+      <!-- Network.Windows.Computer.NetstatWatcher.TwoState.Test.Probe -->
+      <ProbeActionModuleType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Probe" Accessibility="Internal" Batching="false" PassThrough="false">
+        <Configuration>
           <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <ModuleImplementation Isolation="Any">
           <Composite>
@@ -105,13 +266,9 @@
                     <Name>MonitorItem</Name>
                     <Value>$Config/MonitorItem$</Value>
                   </Parameter>
-                  <Parameter>
-                    <Name>Threshold</Name>
-                    <Value>$Config/Threshold$</Value>
-                  </Parameter>                  
                 </Parameters>
-                <TimeoutSeconds>300</TimeoutSeconds>
-              </ProbeAction>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>                
+                </ProbeAction>
             </MemberModules>
             <Composition>
               <Node ID="PSScript" />
@@ -121,10 +278,10 @@
         <OutputType>System!System.PropertyBagData</OutputType>
         <InputType>System!System.BaseData</InputType>
       </ProbeActionModuleType>
-
+      
     </ModuleTypes>
 
-    <MonitorTypes>
+    <MonitorTypes> 
 
       <!-- Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType -->
       <UnitMonitorType ID="Network.Windows.Computer.NetstatWatcher.ThreeState.Test.MonitorType" Accessibility="Public">
@@ -137,13 +294,19 @@
           <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
           <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-          <xsd:element name="Threshold" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />          
+          <xsd:element name="MatchCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SampleCount" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="WithinSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
         </Configuration>
         <OverrideableParameters>
           <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
-          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
-          <OverrideableParameter ID="Threshold" Selector="$Config/Threshold$" ParameterType="string" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />          
+          <OverrideableParameter ID="MatchCount" Selector="$Config/MatchCount$" ParameterType="int" />
+          <OverrideableParameter ID="SampleCount" Selector="$Config/SampleCount$" ParameterType="int" />
+          <OverrideableParameter ID="WithinSeconds" Selector="$Config/WithinSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />          
         </OverrideableParameters>
         <MonitorImplementation>
           <MemberModules>
@@ -151,13 +314,20 @@
               <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
               <SyncTime>$Config/SyncTime$</SyncTime>
               <MonitorItem>$Config/MonitorItem$</MonitorItem>
-              <Key>$Config/Key$</Key>
-              <Threshold>$Config/Threshold$</Threshold>              
+              <Key>$Config/Key$</Key>              
+              <MatchCount>$Config/MatchCount$</MatchCount>
+              <SampleCount>$Config/SampleCount$</SampleCount>
+              <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
             </DataSource>
             <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
             <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.ThreeState.Probe">
-              <MonitorItem>$Config/MonitorItem$</MonitorItem>
-              <Threshold>$Config/Threshold$</Threshold>              
+              <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+              <MonitorItem>$Config/MonitorItem$</MonitorItem>              
+              <MatchCount>$Config/MatchCount$</MatchCount>
+              <SampleCount>$Config/SampleCount$</SampleCount>
+              <WithinSeconds>$Config/WithinSeconds$</WithinSeconds>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
             </ProbeAction>
             <ConditionDetection ID="FilterUnderThreshold" TypeID="System!System.ExpressionFilter">
               <Expression>
@@ -219,6 +389,82 @@
         </MonitorImplementation>
       </UnitMonitorType>
 
+
+      <!-- Network.Windows.Computer.NetstatWatcher.TwoState.Test.MonitorType -->
+      <UnitMonitorType ID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.MonitorType" Accessibility="Internal">
+        <MonitorTypeStates>
+          <MonitorTypeState ID="Success" NoDetection="false" />
+          <MonitorTypeState ID="Failure" NoDetection="false" />
+        </MonitorTypeStates>
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="SyncTime" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />  
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="MonitorItem" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+          <xsd:element name="Key" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+        </OverrideableParameters>
+        <MonitorImplementation>
+          <MemberModules>
+            <DataSource ID="DataSource" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Test.PropertyBag.Filtered">
+              <IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds>
+              <SyncTime>$Config/SyncTime$</SyncTime>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              <MonitorItem>$Config/MonitorItem$</MonitorItem>
+              <Key>$Config/Key$</Key>
+            </DataSource>
+            <ProbeAction ID="PassThru" TypeID="System!System.PassThroughProbe" />
+            <ProbeAction ID="Probe" TypeID="Network.Windows.Computer.NetstatWatcher.TwoState.Probe">
+              <MonitorItem>$Config/MonitorItem$</MonitorItem>
+              <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+            </ProbeAction>
+            <ConditionDetection ID="FilterSuccess" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Good</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+            <ConditionDetection ID="FilterFailure" TypeID="System!System.ExpressionFilter">
+              <Expression>
+                <SimpleExpression>
+                  <ValueExpression>
+                    <XPathQuery Type="String">Property[@Name='State']</XPathQuery>
+                  </ValueExpression>
+                  <Operator>Equal</Operator>
+                  <ValueExpression>
+                    <Value Type="String">Bad</Value>
+                  </ValueExpression>
+                </SimpleExpression>
+              </Expression>
+            </ConditionDetection>
+          </MemberModules>
+          <RegularDetections>
+            <RegularDetection MonitorTypeStateID="Success">
+              <Node ID="FilterSuccess">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+            <RegularDetection MonitorTypeStateID="Failure">
+              <Node ID="FilterFailure">
+                <Node ID="DataSource" />
+              </Node>
+            </RegularDetection>
+          </RegularDetections>
+        </MonitorImplementation>
+      </UnitMonitorType>
+      
+      
     </MonitorTypes>
 
   </TypeDefinitions>

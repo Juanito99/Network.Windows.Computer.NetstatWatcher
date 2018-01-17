@@ -1,4 +1,11 @@
-﻿param($sourceId,$managedEntityId,$MonitorItem)
+﻿param($sourceId,$managedEntityId,$MonitorItem,$Threshold,$IntervalSeconds,$MatchCount,$SampleCount,$WithinSeconds,$TimeoutSeconds)
+
+$Threshold       = [int]::Parse($Threshold)
+$IntervalSeconds = [int]::Parse($IntervalSeconds)
+$MatchCount      = [int]::Parse($MatchCount)
+$SampleCount     = [int]::Parse($SampleCount)
+$WithinSeconds   = [int]::Parse($WithinSeconds)
+$TimeoutSeconds  = [int]::Parse($TimeoutSeconds)
 
 
 $api           = New-Object -ComObject 'MOM.ScriptAPI'
@@ -17,10 +24,9 @@ $localIPAddresses      = ([System.Net.Dns]::GetHostAddresses($localComputerName)
 $regPath               = 'HKLM:\SOFTWARE\ABCIT\NetstatWatcher'
 $filePath              = Get-ItemProperty -Path $regPath | Select-Object -ExpandProperty FilePath
 
-$netStatIpFile         = $filePath + '\' + 'netstatIp.txt'		
+$netStatIpFile         = $filePath + '\' + 'netstatIp' + $MonitorItem + '.txt'		
 
-
-$regIPPat              = '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+$regIpPat              = '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
 $regNamePat            = '[a-zA-Z]{1,}[-_\.]?[0-9]?'
 		 
  
@@ -57,15 +63,15 @@ Function Format-NetstatData {
 				$remoteIP        = ($netStatItmParts[3] -split ':')[0]
 				$remotePort      = ($netStatItmParts[3] -split ':')[1]
 				$connectState    = $netStatItmParts[4]
-				$procId          = $netStatItmParts[5]
-				
+				$procId          = $netStatItmParts[5]				
+
 				$procInfo = $allProcesses | Where-Object { $_.id -eq $procId }
 				$procName = $procInfo.Name												
 
 				if ($localIPAddresses -contains $localIP) {
 					$localName = $localComputerName
 				}					
-			
+			                                                         
 				if (($localIp -match $regIpPat -and $remoteIp -match $regIpPat) -and ($remoteIP -notmatch '0.0.0.0|127.0.0.1') ) {
 					$myNetHsh = @{'proto' = $proto}
 					$myNetHsh.Add('localIP', $localIP)
@@ -150,10 +156,10 @@ if($MonitorItem -eq 'tcpConnection') {
 
 	$monitoredTcpConnectsFilePath = $filePath + '\' + 'monitoredTcpConnects.csv'
 	
-	if (Test-Path -Path $monitoredTcpConnectsFilePath) {				
-				
-		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath		
+	if (Test-Path -Path $monitoredTcpConnectsFilePath) {						
 		
+		$monitoredTcpConnects = Import-Csv -Path $monitoredTcpConnectsFilePath					
+
 		foreach ($tcpConnect in $monitoredTcpConnects) {
 
 			$remoteIP        = ''
@@ -172,102 +178,163 @@ if($MonitorItem -eq 'tcpConnection') {
 						
 			if ($remoteName -and ([String]::IsNullOrEmpty($remoteIP))) {
 				$remoteIP = [system.net.dns]::Resolve($remoteName).AddressList | Where-Object { $_.AddressFamily -eq 'interNetwork' } | Select-Object -ExpandProperty IPAddressToString
-			} 
-			
+			} 		
+				
 			if ($remotePort -and $remoteIP) {	
 				
-				$connectDetails = $netStatIPConnects | Where-Object { $_.remotePort -eq $remotePort -and $_.remoteIP -eq $remoteIP }							
+				$SampleResults = @()			
+			  
+				if (-not $WithinSeconds) {					
+					$WithinSeconds = $IntervalSeconds					
+				}
+
+				if ($WithinSeconds -ge $IntervalSeconds) {					
+					$WithinSeconds = $IntervalSeconds					
+				}
+			
+				if (-not $MatchCount) {					
+					$MatchCount = 3					
+				}
+
+				if (-not $SampleCount) {					
+					$SampleCount = $MatchCount					
+				}
+
+				if ($MatchCount -gt $SampleCount) {					
+					$MatchCount = $SampleCount					
+				}
 				
-				if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails)) {
+				if ($WithinSeconds -gt $TimeoutSeconds) {					
+					$WithinSeconds = $TimeoutSeconds					
+				}					
+							
+				$timeToWait = $WithinSeconds / $SampleCount
+				$timeToWait = [Math]::Round($timeToWait)							
+
+				for ($loopRunner = 1; $loopRunner -le $SampleCount; $loopRunner ++) {
 					
-					$localIP         = $localIPAddresses					
-					$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
-					$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
-
-					$connectionState = 'No active connection found.'									
+					$doForeachFlag = $true			
+						
+					$connectDetails = $netStatIPConnects | Where-Object { $_.remotePort -eq $remotePort -and $_.remoteIP -eq $remoteIP }							
 				
-					$state           = 'Red'
-					$localName       = 'NA'
-					$localPort       = 'NA'										
-					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName)`n ConnecionState: $($connectionState)`n"
-					$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"								
-											
-					$bag = $api.CreatePropertybag()								
-					$bag.AddValue("Key",$key)		
-					$bag.AddValue("State",$state)				
-					$bag.AddValue("Supplement",$supplement)		
-					$bag.AddValue("TestedAt",$testedAt)			
-					$bag	
+					if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails)) {					
 
-					continue
+						$localIP         = $localIPAddresses					
+						$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+						$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+						$testedAt        = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+						$connectionState = 'No active connection found.'									
+				
+						$state           = 'Red'
+						$localName       = 'NA'
+						$localPort       = 'NA'										
+						$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName)`n ConnecionState: $($connectionState)`n"
+						$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"																		
 					
-				} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))							
+						$myBagHsh = @{'Key' = $key}
+						$myBagHsh.Add('State', $state)
+						$myBagHsh.Add('Supplement', $supplement)
+						$myBagHsh.Add('TestedAt', $testedAt)
+						$myBagObj = New-Object -TypeName PSObject -Property $myBagHsh
+						$SampleResults += $myBagObj
+
+						$doForeachFlag = $false										
+						
+						
+					} #END if ([string]::IsNullOrEmpty($connectDetails) -or [string]::IsNullOrWhiteSpace($connectDetails))											
+
+					foreach ($connDetail in $connectDetails) {								
+
+						$connectionState = ''
+						$supplement      = ''
+
+						$localIP         = $connDetail.localIP
+						$localName       = $connDetail.localName												
+
+						if ([String]::IsNullOrEmpty($remoteName)) {
+							$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
+							if ($tmpName -ne $remoteIP) {
+								$tmpName    = $tmpName -replace $localComputerDomain,''
+								$tmpName    = $tmpName -replace '\.',''
+								$remoteName = $tmpName          
+							} else {
+								$remoteName = 'No reverse record in DNS.'
+							}
+						}
+
+						if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
+							$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
+							if ($tmpName -ne $remoteIP) {
+								$tmpName    = $tmpName -replace $localComputerDomain,''
+								$tmpName    = $tmpName -replace '\.',''
+								$remoteName = $tmpName
+							} else {
+								$remoteName = 'No reverse record in DNS.'
+							}
+						}
+
+						$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
+						$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
+
+						$testedAt        = "Tested on: $(Get-Date -Format u) / $(([TimeZoneInfo]::Local).DisplayName)"
+						$connectionState = $connDetail.connectState
+
+						$supplement      = "localIP: $($localIP)`t  `n procName: $($procName)`t `n ConnecionState: $($connectionState)`n"
+						$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"						
+
+						if ($connectionState -eq 'ESTABLISHED') {
+							$state       = 'Green'						
+						} elseif ($connectionState -eq 'TIME_WAIT') {						
+							$state       = 'Yellow'
+							$supplement += 'TIME_WAIT = Local endpoint (this computer) has closed the connection.'
+						} else {
+							$state       = 'Red'
+							$supplement += 'CLOSE_WAIT = Remote endpoint (this computer) has closed the connection.'
+						}																						
+					
+						if ($doForeachFlag) {
+							$myBagHsh = @{'Key' = $key}
+							$myBagHsh.Add('State', $state)
+							$myBagHsh.Add('Supplement', $supplement)
+							$myBagHsh.Add('TestedAt', $testedAt)
+							$myBagObj = New-Object -TypeName PSObject -Property $myBagHsh
+							$SampleResults += $myBagObj														
+						}				
+						
+					} #END foreach ($connDetail in $connectDetails)					
+										
+					Start-Sleep -Seconds $timeToWait					
+
+				} #END for ($loopRunner = 1; $loopRunner -le $SampleCount; $loopRunner++ )						
 				
-
-				foreach ($connDetail in $connectDetails) {								
-
-					$connectionState = ''
-					$supplement      = ''
-
-					$localIP         = $connDetail.localIP
-					$localName       = $connDetail.localName												
-
-					if ([String]::IsNullOrEmpty($remoteName)) {
-						$tmpName = [system.net.dns]::Resolve($remoteIP).HostName
-						if ($tmpName -ne $remoteIP) {
-							$tmpName    = $tmpName -replace $localComputerDomain,''
-							$tmpName    = $tmpName -replace '\.',''
-							$remoteName = $tmpName          
-						} else {
-							$remoteName = 'No reverse record in DNS.'
-						}
-					}
-
-					if ($remoteName -match '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}') {
-						$tmpName = [system.net.dns]::Resolve($remoteName).HostName					
-						if ($tmpName -ne $remoteIP) {
-							$tmpName    = $tmpName -replace $localComputerDomain,''
-							$tmpName    = $tmpName -replace '\.',''
-							$remoteName = $tmpName
-						} else {
-							$remoteName = 'No reverse record in DNS.'
-						}
-					}
-
-					$displayName     = 'tcpConnect On ' + $localComputerName + ' To ' + $remoteIP + ':' + $remotePort + ' for ' + $procName
-					$Key             = "tcpConnectOn$($localComputerName)For$($procName)To$($remoteIP):$($remotePort)"
-
-					$connectionState = $connDetail.connectState
-
-					$supplement      = "localIP: $($localIP)`t  `n procName: $($procName)`t `n ConnecionState: $($connectionState)`n"
-					$supplement     += "remoteIP: $($remoteIP)`t remotePort: $($remotePort)`n"						
-
-					if ($connectionState -eq 'ESTABLISHED') {
-						$state       = 'Green'						
-					} elseif ($connectionState -eq 'TIME_WAIT') {						
-						$state       = 'Yellow'
-						$supplement += 'TIME_WAIT = Local endpoint (this computer) has closed the connection.'
-					} else {
-						$state       = 'Red'
-						$supplement += 'CLOSE_WAIT = Remote endpoint (this computer) has closed the connection.'
-					}																						
-
-					$bag = $api.CreatePropertybag()								
-					$bag.AddValue("Key",$key)		
-					$bag.AddValue("State",$state)				
-					$bag.AddValue("Supplement",$supplement)		
-					$bag.AddValue("TestedAt",$testedAt)			
-					$bag										
-						
-				} #END foreach ($connDetail in $connectDetails)
-
-						
+				$sampleResultsGreen  = ($SampleResults | Where-Object {$_.State -eq 'Green'}).count				
+				$sampleResultsRed    = ($SampleResults | Where-Object {$_.State -eq 'Red'}).count
+				$sampleResultsYellow = ($SampleResults | Where-Object {$_.State -eq 'Yellow'}).count
+												
+				if ($sampleResultsGreen -ge $MatchCount) {
+					$state = 'Green'
+				} else {
+					$state = ($SampleResults[($SampleResults.count) -1]).State
+				}
+				
+				$Key        = ($SampleResults[($SampleResults.count) -1]).Key
+				$supplement = ($SampleResults[($SampleResults.count) -1]).Supplement
+				$testedAt   = ($SampleResults[($SampleResults.count) -1]).testedAt				
+				
+				$bag = $api.CreatePropertybag()								
+				$bag.AddValue("Key",$key)		
+				$bag.AddValue("State",$state)				
+				$bag.AddValue("Supplement",$supplement)		
+				$bag.AddValue("TestedAt",$testedAt)			
+				$bag									
+									
 			} else {
 
 				$foo = 'No details this time, not sending to inventory.'
 
-			} # END	if ($connectDetails)					
-		
+			} # END	if ($connectDetails)		
+								
 		} #END foreach($tcpConnect in $monitoredTcpConnects)
 
 
@@ -305,7 +372,7 @@ if($MonitorItem -eq 'tcpConnection') {
 			if ($localPort -and $ipProtocol -and $procName) {
 
 				if ([string]::IsNullOrEmpty($localIP)) {
-					$localIP = '-'
+					$localIP = '-'					
 				}
 
 				if ([string]::IsNullOrEmpty($comment)) {
@@ -313,15 +380,15 @@ if($MonitorItem -eq 'tcpConnection') {
 				}
 				
 				$supplement    =  "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `t proto: $($ipProtocol)"						
-
+				
 				$listenDetails = $netStatIPConnects | Where-Object { ($_.procName -imatch $procName) -and ($_.proto -imatch $ipProtocol) -and ($_.localPort -imatch $localPort) }
 				
 				if ([string]::IsNullOrEmpty($listenDetails) -or [string]::IsNullOrWhiteSpace($listenDetails)) {								
 					
 					$Key             = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"
 					$connectionState = 'No active connection found.'											
-					$state           = 'Red'					
-													
+					$state           = 'Bad'																						
+										
 					$bag = $api.CreatePropertybag()								
 					$bag.AddValue("Key",$key)		
 					$bag.AddValue("State",$state)				
@@ -349,7 +416,7 @@ if($MonitorItem -eq 'tcpConnection') {
 					$procName        = $listener.procName
 					$comment         = $listener.comment
 					$connectionState = $listener.connectState					
-					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `C.S.: $($connectionState))"	
+					$supplement      = "localIP: $($localIP)`t localPort: $($localPort)`n procName: $($procName) `n connectionstate: $($connectionState))"	
 
 					if ([string]::IsNullOrEmpty($localIP)) {
 						$localIP = '-'
@@ -361,22 +428,22 @@ if($MonitorItem -eq 'tcpConnection') {
 
 					if ($ipProtocol -ieq 'TCP') {
 						if ($connectionState -eq 'LISTENING') {
-							$state       = 'Green'						
+							$state       = 'Good'						
 						} elseif ($connectionState -eq 'TIME_WAIT') {						
-							$state       = 'Yellow'
+							$state       = 'Good'
 							$supplement += "`nTIME_WAIT = Local endpoint (this computer) has closed the connection."
 						} else {
-							$state       = 'Red'
+							$state       = 'Bad'
 							$supplement += "`nCLOSE_WAIT = Remote endpoint (this computer) has closed the connection."
 						}																		
 					} else {
-						$state       = 'Green'
+						$state       = 'Good'
 						$supplement += "`nUDP - No additional information exposted. "					
 					} # END if ($ipProtocol -eq 'TCP')		
 										
 					
-					$Key = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"								
-					
+					$Key = "listeningPortOn.$($localComputerName)For.$($procName):$($localPort).$($ipProtocol)"																		
+
 					$bag = $api.CreatePropertybag()								
 					$bag.AddValue("Key",$key)		
 					$bag.AddValue("State",$state)				
@@ -395,5 +462,5 @@ if($MonitorItem -eq 'tcpConnection') {
 } else {
 
 	$foo = 'Invalid discovery paramater'
-
+	
 }
